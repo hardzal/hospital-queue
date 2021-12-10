@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\PolyclinicRequest;
 use App\Models\Polyclinic;
 use Illuminate\Http\Request;
 
@@ -16,7 +17,7 @@ class PolyclinicController extends Controller
     {
         $polyclinics = Polyclinic::all();
         $title = "Polyclinic Lists";
-        return view('polyc');
+        return view('polyclinics.index', compact('polyclinics', 'title'));
     }
 
     /**
@@ -26,7 +27,7 @@ class PolyclinicController extends Controller
      */
     public function create()
     {
-        //
+        return view('polyclinics.create');
     }
 
     /**
@@ -35,9 +36,18 @@ class PolyclinicController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(PolyclinicRequest $request)
     {
-        //
+        $validated = $request->validated();
+        $polyclinic = [
+            'name' => $validated->name,
+            'code' => $validated->code,
+            'description' => $validated->description ?? '',
+        ];
+
+        Polyclinic::create($polyclinic);
+
+        return redirect()->route('polyclinic.index')->with('message', 'Berhasil menambahkan poly');
     }
 
     /**
@@ -46,9 +56,9 @@ class PolyclinicController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Polyclinic $polyclinic)
     {
-        //
+        return view('polyclinics.show', compact('polyclinic'));
     }
 
     /**
@@ -57,9 +67,9 @@ class PolyclinicController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Polyclinic $polyclinic)
     {
-        //
+        return view('polyclinic.edit', compact('polyclinic'));
     }
 
     /**
@@ -69,9 +79,15 @@ class PolyclinicController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Polyclinic $request, Polyclinic $polyclinic)
     {
-        //
+        $validated = $request->validated();
+        $polyclinic->code = $validated->code;
+        $polyclinic->name = $validated->name;
+        $polyclinic->description = $validated->description ?? '';
+        $polyclinic->save();
+
+        return redirect()->route('polyclinics.index')->with('message', 'Berhasil memperbaharui data!');
     }
 
     /**
@@ -80,8 +96,9 @@ class PolyclinicController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Polyclinic $polyclinic)
     {
-        //
+        $polyclinic->delete();
+        return redirect()->route('polyclinics.index')->with('message', 'Berhasil menghapus data!');
     }
 }

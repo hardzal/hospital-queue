@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\UserRequest;
+use App\Models\User;
 use Illuminate\Http\Request;
 
 class UserController extends Controller
@@ -13,7 +15,10 @@ class UserController extends Controller
      */
     public function index()
     {
-        //
+        $users = User::all();
+        $title = "User lists";
+
+        return view('users.index', compact('title', 'users'));
     }
 
     /**
@@ -23,7 +28,7 @@ class UserController extends Controller
      */
     public function create()
     {
-        //
+        return view('users.create');
     }
 
     /**
@@ -32,9 +37,19 @@ class UserController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(UserRequest $request)
     {
-        //
+        $validated = $request->validated();
+        $user = [
+            'role_id' => $validated->role_id,
+            'name' => $validated->name,
+            'username' => $validated->username,
+            'password' => bcrypt($validated->password),
+            'email' => $validated->email
+        ];
+
+        User::create($user);
+        return redirect()->route('users.index')->with('message', 'Berhasil membuat user');
     }
 
     /**
@@ -43,9 +58,9 @@ class UserController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(User $user)
     {
-        //
+        return view('users.show', compact('user'));
     }
 
     /**
@@ -54,9 +69,9 @@ class UserController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(User $user)
     {
-        //
+        return view('users.edit', compact('user'));
     }
 
     /**
@@ -66,9 +81,20 @@ class UserController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, User $user)
     {
-        //
+        $validated = $request->validated();
+
+        $user->role_id = $validated->role_id;
+        $user->name = $validated->name;
+        $user->username = $validated->username;
+        if ($validated->password) {
+            $user->password = bcrypt($validated->password);
+        }
+        $user->email = $validated->email;
+        $user->save();
+
+        return redirect()->route('users.index')->with('message', 'Berhasil membuat user');
     }
 
     /**
@@ -77,8 +103,9 @@ class UserController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(User $user)
     {
-        //
+        $user->delete();
+        return redirect()->route('users.index')->with('message', 'Berhasil menghapus user');
     }
 }

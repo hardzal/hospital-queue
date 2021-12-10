@@ -47,7 +47,7 @@ class PatientController extends Controller
 
         Patient::create($patient);
 
-        return view('patient.index');
+        return redirect()->route('patient.index')->with('message', 'berhasil menambahkan data!');
     }
     /**
      * Display the specified resource.
@@ -87,7 +87,7 @@ class PatientController extends Controller
         $patient->no_hp = $validated->no_hp ?? '';
         $patient->save();
 
-        return view('patients.index')->with('message', 'Berhasil memperbaharui data!');
+        return redirect()->route('patients.index')->with('message', 'Berhasil memperbaharui data!');
     }
 
     /**
@@ -99,6 +99,6 @@ class PatientController extends Controller
     public function destroy(Patient $patient)
     {
         $patient->delete();
-        return view('patients.index')->with('message', 'Berhasil menghapus data!');
+        return redirect()->route('patients.index')->with('message', 'Berhasil menghapus data!');
     }
 }
