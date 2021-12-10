@@ -2,7 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
+use App\Http\Requests\PatientRequest;
+use App\Models\Patient;
 
 class PatientController extends Controller
 {
@@ -13,7 +14,9 @@ class PatientController extends Controller
      */
     public function index()
     {
-        //
+        $patients = Patient::all();
+        $title = 'Patient Lists';
+        return view('patients.index', compact('patients', 'title'));
     }
 
     /**
@@ -23,7 +26,7 @@ class PatientController extends Controller
      */
     public function create()
     {
-        //
+        return view('patients.create');
     }
 
     /**
@@ -32,20 +35,29 @@ class PatientController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(PatientRequest $request)
     {
-        //
-    }
+        $validated = $request->validated();
+        $patient = [
+            'name' => $validated->name,
+            'gender' => $validated->gender,
+            'email' => $validated->email,
+            'no_hp' => $validated->no_hp ?? ''
+        ];
 
+        Patient::create($patient);
+
+        return view('patient.index');
+    }
     /**
      * Display the specified resource.
      *
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Patient $patient)
     {
-        //
+        return view('patients.show', compact('patient'));
     }
 
     /**
@@ -54,9 +66,9 @@ class PatientController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Patient $patient)
     {
-        //
+        return view('patients.edit', compact('patient'));
     }
 
     /**
@@ -66,9 +78,16 @@ class PatientController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(PatientRequest $request, Patient $patient)
     {
-        //
+        $validated = $request->validated();
+        $patient->name = $validated->name;
+        $patient->email = $validated->email;
+        $patient->gender = $validated->gender;
+        $patient->no_hp = $validated->no_hp ?? '';
+        $patient->save();
+
+        return view('patients.index')->with('message', 'Berhasil memperbaharui data!');
     }
 
     /**
@@ -77,8 +96,9 @@ class PatientController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Patient $patient)
     {
-        //
+        $patient->delete();
+        return view('patients.index')->with('message', 'Berhasil menghapus data!');
     }
 }

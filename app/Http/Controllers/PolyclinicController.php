@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Polyclinic;
 use Illuminate\Http\Request;
 
 class PolyclinicController extends Controller
@@ -13,7 +14,9 @@ class PolyclinicController extends Controller
      */
     public function index()
     {
-        //
+        $polyclinics = Polyclinic::all();
+        $title = "Polyclinic Lists";
+        return view('polyc');
     }
 
     /**
