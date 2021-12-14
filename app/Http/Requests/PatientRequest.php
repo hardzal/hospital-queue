@@ -27,7 +27,7 @@ class PatientRequest extends FormRequest
             'name' => 'required|min:2',
             'gender' => 'required',
             'email' => 'required|email',
-            'no_hp' => 'min:10|max:12'
+            'no_hp' => 'required|min:10|max:13'
         ];
     }
 
@@ -41,7 +41,9 @@ class PatientRequest extends FormRequest
         return [
             'name.required' => 'Nama wajib diisi!',
             'gender.required' => 'Jenis Kelamin wajib diisi!',
-            'email.required' => 'Email wajib diisi!'
+            'email.required' => 'Email wajib diisi!',
+            'no_hp.min' => 'Minimal 10 karakter untuk No Hp',
+            'no_hp.max' => 'Maksimal 13 karakter untuk No Hp'
         ];
     }
 }

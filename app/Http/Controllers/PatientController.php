@@ -26,7 +26,8 @@ class PatientController extends Controller
      */
     public function create()
     {
-        return view('patients.create');
+        $title = "Create New a Patient";
+        return view('patients.create', compact('title'));
     }
 
     /**
@@ -39,15 +40,16 @@ class PatientController extends Controller
     {
         $validated = $request->validated();
         $patient = [
-            'name' => $validated->name,
-            'gender' => $validated->gender,
-            'email' => $validated->email,
-            'no_hp' => $validated->no_hp ?? ''
+            'name' => $validated['name'],
+            'gender' => $validated['gender'],
+            'email' => $validated['email'],
+            'no_hp' => $validated['no_hp'],
+            'password' => bcrypt($validated['no_hp']),
         ];
 
         Patient::create($patient);
 
-        return redirect()->route('patient.index')->with('message', 'berhasil menambahkan data!');
+        return redirect()->route('patients.index')->with('message', 'berhasil menambahkan data!');
     }
     /**
      * Display the specified resource.
@@ -68,7 +70,8 @@ class PatientController extends Controller
      */
     public function edit(Patient $patient)
     {
-        return view('patients.edit', compact('patient'));
+        $title = "Edit Data Pasien";
+        return view('patients.edit', compact('patient', 'title'));
     }
 
     /**
@@ -81,10 +84,15 @@ class PatientController extends Controller
     public function update(PatientRequest $request, Patient $patient)
     {
         $validated = $request->validated();
-        $patient->name = $validated->name;
-        $patient->email = $validated->email;
-        $patient->gender = $validated->gender;
-        $patient->no_hp = $validated->no_hp ?? '';
+        $patient->name = $validated['name'];
+        $patient->email = $validated['email'];
+        $patient->gender = $validated['gender'];
+        $patient->no_hp = $validated['no_hp'];
+
+        if (isset($validated['password'])) {
+            $patient->password = bcrypt($validated['password']);
+        }
+
         $patient->save();
 
         return redirect()->route('patients.index')->with('message', 'Berhasil memperbaharui data!');
