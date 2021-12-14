@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\PolyclinicRequest;
+use App\Http\Requests\StorePolyclinicRequest;
+use App\Http\Requests\UpdatePolyclinicRequest;
 use App\Models\Polyclinic;
-use Illuminate\Http\Request;
 
 class PolyclinicController extends Controller
 {
@@ -27,7 +27,9 @@ class PolyclinicController extends Controller
      */
     public function create()
     {
-        return view('polyclinics.create');
+        $title = "Create a new Polyclinic";
+
+        return view('polyclinics.create', compact('title'));
     }
 
     /**
@@ -36,18 +38,18 @@ class PolyclinicController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(PolyclinicRequest $request)
+    public function store(StorePolyclinicRequest $request)
     {
         $validated = $request->validated();
         $polyclinic = [
-            'name' => $validated->name,
-            'code' => $validated->code,
-            'description' => $validated->description ?? '',
+            'name' => $validated['name'],
+            'code' => $validated['code'],
+            'description' => $validated['description'] ?? '',
         ];
 
         Polyclinic::create($polyclinic);
 
-        return redirect()->route('polyclinic.index')->with('message', 'Berhasil menambahkan poly');
+        return redirect()->route('polyclinics.index')->with('message', 'Berhasil menambahkan poli');
     }
 
     /**
@@ -69,7 +71,8 @@ class PolyclinicController extends Controller
      */
     public function edit(Polyclinic $polyclinic)
     {
-        return view('polyclinic.edit', compact('polyclinic'));
+        $title = "Edit Data Polyclinic";
+        return view('polyclinics.edit', compact('polyclinic', 'title'));
     }
 
     /**
@@ -79,12 +82,11 @@ class PolyclinicController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Polyclinic $request, Polyclinic $polyclinic)
+    public function update(UpdatePolyclinicRequest $request, Polyclinic $polyclinic)
     {
         $validated = $request->validated();
-        $polyclinic->code = $validated->code;
-        $polyclinic->name = $validated->name;
-        $polyclinic->description = $validated->description ?? '';
+        $polyclinic->name = $validated['name'];
+        $polyclinic->description = $validated['description'] ?? '';
         $polyclinic->save();
 
         return redirect()->route('polyclinics.index')->with('message', 'Berhasil memperbaharui data!');

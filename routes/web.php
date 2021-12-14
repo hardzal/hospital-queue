@@ -2,6 +2,8 @@
 
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\PatientController;
+use App\Http\Controllers\PolyclinicController;
+use App\Models\Polyclinic;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -21,3 +23,4 @@ Auth::routes(['register' => false]);
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 Route::resource('patients', PatientController::class);
+Route::resource('polyclinics', PolyclinicController::class);
