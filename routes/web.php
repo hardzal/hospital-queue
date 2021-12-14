@@ -1,8 +1,12 @@
 <?php
 
+use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\DoctorscheduleController;
+use App\Http\Controllers\MedicalrecordController;
 use App\Http\Controllers\PatientController;
 use App\Http\Controllers\PolyclinicController;
+use App\Http\Controllers\UserController;
 use App\Models\Polyclinic;
 use Illuminate\Support\Facades\Route;
 
@@ -19,8 +23,16 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', [DashboardController::class, 'index'])->name('dashboard.index');
 
+// login non pasien
 Auth::routes(['register' => false]);
 
+// login pasien
+Route::get('pasien/login', [LoginController::class, 'login_pasien']);
+
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+
 Route::resource('patients', PatientController::class);
 Route::resource('polyclinics', PolyclinicController::class);
+Route::resource('users', UserController::class);
+Route::resource('records', DoctorscheduleController::class);
+Route::resource('schedules', MedicalrecordController::class);

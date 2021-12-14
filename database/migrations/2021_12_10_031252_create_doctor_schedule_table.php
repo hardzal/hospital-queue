@@ -17,8 +17,6 @@ class CreateDoctorSchedulesTable extends Migration
             $table->id();
             $table->foreignId('user_id')->constrained()->onUpdate('cascade')->onDelete('cascade');
             $table->foreignId('polyclinic_id')->constrained()->onUpdate('cascade')->onDelete('cascade');
-            $table->datetime('time_start')->nullable();
-            $table->datetime('time_end')->nullable();
             $table->bigInteger('quota')->default(1);
             $table->integer('status')->default(1);
             $table->text('description')->nullable();

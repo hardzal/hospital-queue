@@ -47,7 +47,7 @@
                 </a>
             </li>
             <li class="nav-item">
-                <a href="{{ route('dashboard.index') }}" class="nav-link">
+                <a href="{{ route('records.index') }}" class="nav-link">
                     <i class="nav-icon fas fa-book-medical"></i>
                     <p>
                         Medical Record
@@ -55,7 +55,7 @@
                 </a>
             </li>
             <li class="nav-item">
-                <a href="{{ route('dashboard.index') }}" class="nav-link">
+                <a href="{{ route('schedules.index') }}" class="nav-link">
                     <i class="nav-icon fas fa-calendar-alt"></i>
                     <p>
                         Doctor Schedules
@@ -63,7 +63,7 @@
                 </a>
             </li>
             <li class="nav-item">
-                <a href="{{ route('dashboard.index') }}" class="nav-link">
+                <a href="{{ route('users.index') }}" class="nav-link">
                     <i class="nav-icon fas fa-user"></i>
                     <p>
                         Users

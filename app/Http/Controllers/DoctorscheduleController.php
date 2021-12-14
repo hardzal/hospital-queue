@@ -2,11 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\RoleRequest;
-use App\Models\Role;
 use Illuminate\Http\Request;
 
-class RoleController extends Controller
+class DoctorscheduleController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -15,10 +13,7 @@ class RoleController extends Controller
      */
     public function index()
     {
-        $roles = Role::all();
-        $title = "Role lists";
-
-        return view('roles.index', compact('title', 'roles'));
+        //
     }
 
     /**
@@ -28,7 +23,7 @@ class RoleController extends Controller
      */
     public function create()
     {
-        return view('roles.create');
+        //
     }
 
     /**
@@ -37,13 +32,9 @@ class RoleController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(RoleRequest $request)
+    public function store(Request $request)
     {
-        $validated = $request->validated();
-        $role = ['name' => $validated->name];
-
-        Role::create($role);
-        return redirect()->route('roles.index')->with('message', 'Berhasil menambah data!');
+        //
     }
 
     /**
@@ -52,9 +43,9 @@ class RoleController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show(Role $role)
+    public function show($id)
     {
-        return view('roles.index', compact('role'));
+        //
     }
 
     /**
@@ -63,9 +54,9 @@ class RoleController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit(Role $role)
+    public function edit($id)
     {
-        return view('roles.edit', compact('role'));
+        //
     }
 
     /**
@@ -75,13 +66,9 @@ class RoleController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(RoleRequest $request, Role $role)
+    public function update(Request $request, $id)
     {
-        $validated = $request->validated();
-        $role->name = $validated->name;
-        $role->save();
-
-        return redirect()->route('roles.index')->with('message', 'Berhasil menambah data!');
+        //
     }
 
     /**
@@ -90,9 +77,8 @@ class RoleController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Role $role)
+    public function destroy($id)
     {
-        $role->delete();
-        return redirect()->route('roles.index')->with('message', 'Berhasil menghapus data!');
+        //
     }
 }
