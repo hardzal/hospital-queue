@@ -27,7 +27,7 @@
         </div>
         <!-- /.card-header -->
         <div class="card-body">
-            <a href="{{ route('users.create') }}" class="btn btn-md btn-primary mb-3">Tambah Jadwal</a>
+            <a href="{{ route('schedules.create') }}" class="btn btn-md btn-primary mb-3">Tambah Jadwal</a>
             @if(session()->has('message'))
             <div class="alert alert-success alert-dismissible fade show" role="alert">
                 {{ session("message") }}
@@ -43,25 +43,21 @@
                 <thead>
                     <tr>
                         <th width="5" style="text-align:center;">No</th>
-                        <th>Email</th>
-                        <th>Nama Lengkap</th>
-                        <th>Username</th>
-                        <th>Role</th>
+                        <th>Hari</th>
+                        <th>Jam</th>
                         <th>Aksi</th>
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach($users as $user)
+                    @foreach($schedules as $schedule)
                     <tr>
                         <td style="text-align:center;">{{ $loop->iteration }}</td>
-                        <td>{{ $user->email }}</td>
-                        <td>{{ $user->name }}</td>
-                        <td>{{ $user->username }}</td>
-                        <td>{{ $user->role->name }}</td>
+                        <td>{{ $schedule->day_start. " - ". $schedule->day_end }}</td>
+                        <td>{{ $schedule->time_start. " - ". $schedule->time_end}}</td>
                         <td>
-                            <a href="{{ route('users.edit', ['user' => $user->id]) }}"
+                            <a href="{{ route('schedules.edit', ['schedule' => $schedule->id]) }}"
                                 class="btn btn-md btn-success mr-5">Edit</a>
-                            <form method="POST" action="{{ route('users.destroy', ['user' => $user->id]) }}"
+                            <form method="POST" action="{{ route('schedules.destroy', ['schedule' => $schedule->id]) }}"
                                 style="display:inline;">
                                 @csrf
                                 @method('DELETE')

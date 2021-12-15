@@ -3,9 +3,11 @@
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DoctorscheduleController;
+use App\Http\Controllers\HomeController;
 use App\Http\Controllers\MedicalrecordController;
 use App\Http\Controllers\PatientController;
 use App\Http\Controllers\PolyclinicController;
+use App\Http\Controllers\ScheduleController;
 use App\Http\Controllers\UserController;
 use App\Models\Polyclinic;
 use Illuminate\Support\Facades\Route;
@@ -35,4 +37,7 @@ Route::resource('patients', PatientController::class);
 Route::resource('polyclinics', PolyclinicController::class);
 Route::resource('users', UserController::class);
 Route::resource('records', DoctorscheduleController::class);
-Route::resource('schedules', MedicalrecordController::class);
+Route::resource('doctorschedules', ScheduleController::class);
+Route::resource('schedules', ScheduleController::class);
+
+Route::get('print', [HomeController::class, 'test_print']);

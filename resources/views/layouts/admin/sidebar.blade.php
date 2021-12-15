@@ -56,6 +56,14 @@
             </li>
             <li class="nav-item">
                 <a href="{{ route('schedules.index') }}" class="nav-link">
+                    <i class="nav-icon fas fa-clock"></i>
+                    <p>
+                        Schedules
+                    </p>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="{{ route('doctorschedules.index') }}" class="nav-link">
                     <i class="nav-icon fas fa-calendar-alt"></i>
                     <p>
                         Doctor Schedules

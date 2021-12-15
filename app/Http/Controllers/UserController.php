@@ -2,7 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\UserRequest;
+use App\Http\Requests\StoreUserRequest;
+use App\Models\Role;
 use App\Models\User;
 use Illuminate\Http\Request;
 
@@ -28,7 +29,9 @@ class UserController extends Controller
      */
     public function create()
     {
-        return view('users.create');
+        $title = "Create a new User";
+        $roles = Role::all()->except(['id' => 1]);
+        return view('users.create', compact('title', 'roles'));
     }
 
     /**
@@ -37,15 +40,15 @@ class UserController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(UserRequest $request)
+    public function store(StoreUserRequest $request)
     {
         $validated = $request->validated();
         $user = [
-            'role_id' => $validated->role_id,
-            'name' => $validated->name,
-            'username' => $validated->username,
-            'password' => bcrypt($validated->password),
-            'email' => $validated->email
+            'role_id' => $validated['role_id'],
+            'name' => $validated['name'],
+            'username' => $validated['username'],
+            'password' => bcrypt($validated['password']),
+            'email' => $validated['email'],
         ];
 
         User::create($user);

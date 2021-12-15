@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateDoctorSchedulesTable extends Migration
+class CreateDoctorScheduleTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,7 +13,7 @@ class CreateDoctorSchedulesTable extends Migration
      */
     public function up()
     {
-        Schema::create('doctor_schedules', function (Blueprint $table) {
+        Schema::create('doctor_schedule', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained()->onUpdate('cascade')->onDelete('cascade');
             $table->foreignId('polyclinic_id')->constrained()->onUpdate('cascade')->onDelete('cascade');
