@@ -2,11 +2,18 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StoreScheduleRequest;
+use App\Http\Requests\UpdateScheduleRequest;
 use App\Models\Schedule;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Schema;
 
 class ScheduleController extends Controller
 {
+    public function __construct()
+    {
+        $this->days = ['Senin', 'Selasa', 'Rabu', 'Kamis', 'Jum\'at', 'Sabtu', 'Minggu'];
+    }
     /**
      * Display a listing of the resource.
      *
@@ -16,7 +23,6 @@ class ScheduleController extends Controller
     {
         $schedules = Schedule::all();
         $title = "Schedule lists";
-        $days = ['Senin', 'Selasa', 'Rabu', 'Kamis', 'Jum\'at', 'Sabtu', 'Minggu'];
         return view('schedules.index', compact('title', 'schedules'));
     }
 
@@ -27,7 +33,10 @@ class ScheduleController extends Controller
      */
     public function create()
     {
-        //
+        $title = 'Create a new Schedule';
+        $days = $this->days;
+
+        return view('schedules.create', compact('days', 'title'));
     }
 
     /**
@@ -36,9 +45,18 @@ class ScheduleController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(StoreScheduleRequest $request)
     {
-        //
+        $validated = $request->validated();
+        $schedule = [
+            'day_start' => $validated['day_start'],
+            'day_end' => $validated['day_end'],
+            'time_start' => $validated['time_start'],
+            'time_end' => $validated['time_end']
+        ];
+
+        Schedule::create($schedule);
+        return redirect()->route('schedules.index')->with('message', 'Berhasil membuat jadwal');
     }
 
     /**
@@ -49,7 +67,8 @@ class ScheduleController extends Controller
      */
     public function show($id)
     {
-        //
+        $title = '';
+        return view('schedules.show', compact('title'));
     }
 
     /**
@@ -58,9 +77,12 @@ class ScheduleController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Schedule $schedule)
     {
-        //
+        $title = 'Edit Schedule';
+        $days = $this->days;
+
+        return view('schedules.edit', compact('schedule', 'title', 'days'));
     }
 
     /**
@@ -70,9 +92,16 @@ class ScheduleController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(UpdateScheduleRequest $request, Schedule $schedule)
     {
-        //
+        $validated = $request->validated();
+        $schedule->day_start = $validated['day_start'];
+        $schedule->day_end = $validated['day_end'];
+        $schedule->time_start = $validated['time_start'];
+        $schedule->time_end = $validated['time_end'];
+
+        $schedule->save();
+        return redirect()->route('schedules.index')->with('message', 'Berhasil membuat jadwal');
     }
 
     /**
@@ -81,8 +110,9 @@ class ScheduleController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Schedule $schedule)
     {
-        //
+        $schedule->delete();
+        return redirect()->route('schedules.index')->with('message', 'Berhasil menghapus jadwal');
     }
 }

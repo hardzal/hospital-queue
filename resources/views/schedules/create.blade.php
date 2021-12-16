@@ -26,12 +26,20 @@
         <form method="POST" action="{{ route('schedules.store') }}">
             @csrf
             <div class="card-body">
+
                 <div class="row">
                     <div class="col-md-6">
                         <div class="form-group">
                             <label for="day_start">Hari Mulai</label>
-                            <select name="">
-
+                            <select name="day_start" class="form-control @error('day_start') is-invalid @enderror">
+                                <option>Pilih Hari Mulai</option>
+                                @foreach($days as $day)
+                                @if(old('day_start'))
+                                <option value="{{ $day }}" selected>{{ $day }}</option>
+                                @else
+                                <option value="{{ $day }}">{{ $day }}</option>
+                                @endif
+                                @endforeach
                             </select>
                             @error('name')
                             <div class="invalid-feedback">
@@ -42,11 +50,18 @@
                     </div>
                     <div class="col-md-6">
                         <div class="form-group">
-                            <label for="username">Username</label>
-                            <input type="text" class="form-control @error('username') is-invalid @enderror"
-                                id="username" placeholder="Enter username" name="username" value="{{ old('username') }}"
-                                required />
-                            @error('username')
+                            <label for="day_end">Hari Selesai</label>
+                            <select name="day_end" class="form-control @error('day_end') is-invalid @enderror">
+                                <option>Pilih Hari Selesai</option>
+                                @foreach($days as $day)
+                                @if(old('day_end'))
+                                <option value="{{ $day }}" selected>{{ $day }}</option>
+                                @else
+                                <option value="{{ $day }}">{{ $day }}</option>
+                                @endif
+                                @endforeach
+                            </select>
+                            @error('day_end')
                             <div class="invalid-feedback">
                                 {{ $message }}
                             </div>
@@ -54,30 +69,34 @@
                         </div>
                     </div>
                 </div>
-                <div class="form-group">
-                    <label for="password">Password</label>
-                    <input type="password" class="form-control @error('password') is-invalid @enderror"
-                        placeholder="Enter a password" id="password" name="password" />
-                    @error('password')
-                    <div class="invalid-feedback">
-                        {{ $message }}
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="time_start">Waktu Mulai</label>
+                            <input type="time" name="time_start" id="time_start" value="{{ old('time_start') }}"
+                                class="form-control @error('time_start') is-invalid @enderror" />
+                            @error('time_start')
+                            <div class="invalid-feedback">
+                                {{ $message }}
+                            </div>
+                            @enderror
+                        </div>
                     </div>
-                    @enderror
-                </div>
-                <div class="form-group">
-                    <label for="role">Role</label>
-                    <select name="role_id" class="form-control">
-                        <option>Pilih Role</option>
-                        @foreach($roles as $role)
-                        <option value="{{ $role->id }}">{{ $role->name }}</option>
-                        @endforeach
-                    </select>
-                    @error('role')
-                    <div class="invalid-feedback">
-                        {{ $message }}
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="time_end">Waktu Selesai</label>
+                            <input type="time" name="time_end" id="time_end" value="{{ old('time_end') }}"
+                                class="form-control @error('time_end') is-invalid @enderror" />
+                            @error('time_end')
+                            <div class="invalid-feedback">
+                                {{ $message }}
+                            </div>
+                            @enderror
+                        </div>
                     </div>
-                    @enderror
                 </div>
+
             </div>
             <div class="card-footer">
                 <button type="submit" class="btn btn-primary">Submit</button>
