@@ -36,7 +36,7 @@
 
             @if(session()->has('error'))
             <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                {{ session("message") }}
+                {{ session("error") }}
             </div>
             @endif
             <table id="data_user" class="table table-bordered table-striped">

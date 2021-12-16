@@ -54,6 +54,10 @@ class ScheduleController extends Controller
             'time_start' => $validated['time_start'],
             'time_end' => $validated['time_end']
         ];
+        $schedule = new Schedule;
+        if (sizeof($schedule->scheduleTime($schedule))) {
+            return redirect()->route('schedules.index')->with('error', 'Jadwal telah tersedia!');
+        }
 
         Schedule::create($schedule);
         return redirect()->route('schedules.index')->with('message', 'Berhasil membuat jadwal');

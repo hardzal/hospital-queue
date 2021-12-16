@@ -26,9 +26,10 @@ class DoctorscheduleRequest extends FormRequest
         return [
             'user_id' => 'required',
             'polyclinic_id' => 'required',
-            'time_start' => 'required',
-            'time_end' => 'required',
-            'quota' => 'required'
+            'schedule_id' => 'required',
+            'status' => 'required',
+            'quota' => 'required',
+            'description' => '',
         ];
     }
 }

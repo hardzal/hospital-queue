@@ -70,7 +70,7 @@
                 </div>
                 <div class="form-group">
                     <label for="role">Role</label>
-                    <select name="role_id" class="form-control">
+                    <select name="role_id" class="form-control @error('role_id') is-invalid @enderror">
                         <option>Pilih Role</option>
                         @foreach($roles as $role)
                         @if(old('role_id', $user->role->id) == $role->id)

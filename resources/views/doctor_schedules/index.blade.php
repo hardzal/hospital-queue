@@ -6,12 +6,12 @@
     <div class="container-fluid">
         <div class="row mb-2">
             <div class="col-sm-6">
-                <h1>Daftar Pasien</h1>
+                <h1>Daftar Jadwal Dokter</h1>
             </div>
             <div class="col-sm-6">
                 <ol class="breadcrumb float-sm-right">
                     <li class="breadcrumb-item"><a href="#">Home</a></li>
-                    <li class="breadcrumb-item active">Patient Lists</li>
+                    <li class="breadcrumb-item active">Doctor Schedule Lists</li>
                 </ol>
             </div>
         </div>
@@ -23,11 +23,11 @@
     <!-- Default box -->
     <div class="card">
         <div class="card-header">
-            <h3 class="card-title">Daftar Pasien</h3>
+            <h3 class="card-title">Daftar Jadwal Dokter</h3>
         </div>
         <!-- /.card-header -->
         <div class="card-body">
-            <a href="{{ route('patients.create') }}" class="btn btn-md btn-primary mb-3">Tambah Pasien</a>
+            <a href="{{ route('doctorschedules.create') }}" class="btn btn-md btn-primary mb-3">Tambah Jadwal Dokter</a>
             @if(session()->has('message'))
             <div class="alert alert-success alert-dismissible fade show" role="alert">
                 {{ session("message") }}
@@ -43,25 +43,29 @@
                 <thead>
                     <tr>
                         <th width="5" style="text-align:center;">No</th>
-                        <th>Email</th>
-                        <th>Nama Lengkap</th>
-                        <th>No HP</th>
-                        <th>Jenis Kelamin</th>
+                        <th>Nama Dokter</th>
+                        <th>Jadwal Hari</th>
+                        <th>Kuota</th>
+                        <th>Status</th>
                         <th>Aksi</th>
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach($patients as $patient)
+                    @foreach($doctor_schedule as $item)
                     <tr>
                         <td style="text-align:center;">{{ $loop->iteration }}</td>
-                        <td>{{ $patient->email }}</td>
-                        <td>{{ $patient->name }}</td>
-                        <td>{{ $patient->no_hp }}</td>
-                        <td>{{ $patient->gender == 'P' ? "Perempuan" : 'Laki - Laki'}}</td>
+                        <td>{{ $item->doctor->name }}</td>
+                        <td>{{ $item->schedule->day_start. " s/d ". $item->schedule->day_end . " - ".
+                            $item->schedule->time_start . " - ".
+                            $item->schedule->time_end }}</td>
+                        <td>{{ $item->quota }}</td>
+                        <td>{!! ($item->status) == 1 ? '<span class="badge badge-success">Aktif</span>' : '<span
+                                class="badge badge-danger">Tidak Aktif</span>' !!}</td>
                         <td>
-                            <a href="{{ route('patients.edit', ['patient' => $patient->id]) }}"
+                            <a href="{{ route('doctorschedules.edit', ['doctorschedule' => $item->id]) }}"
                                 class="btn btn-md btn-success mr-5">Edit</a>
-                            <form method="POST" action="{{ route('patients.destroy', ['patient' => $patient->id]) }}"
+                            <form method="POST"
+                                action="{{ route('doctorschedules.destroy', ['doctorschedule' => $item->id]) }}"
                                 style="display:inline;">
                                 @csrf
                                 @method('DELETE')

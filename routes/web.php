@@ -36,8 +36,8 @@ Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name
 Route::resource('patients', PatientController::class);
 Route::resource('polyclinics', PolyclinicController::class);
 Route::resource('users', UserController::class);
-Route::resource('records', DoctorscheduleController::class);
-Route::resource('doctorschedules', ScheduleController::class);
+Route::resource('records', MedicalrecordController::class);
+Route::resource('doctorschedules', DoctorScheduleController::class);
 Route::resource('schedules', ScheduleController::class);
 
 Route::get('print', [HomeController::class, 'test_print']);
