@@ -54,12 +54,15 @@
                     <tr>
                         <td style="text-align:center;">{{ $loop->iteration }}</td>
                         <td>{{ $medical->patient->name }}</td>
-                        <td>{{ $medical->doctorSchedule->schedule->day_start . "s/d".  $medical->doctorSchedule->schedule->day_end }}</td>
-                        <td>{{ $medical->no_hp }}</td>
+                        <td>{{ $medical->doctorschedule->schedule->day_start . " s/d ".
+                            $medical->doctorschedule->schedule->day_end . " : ".
+                            $medical->doctorschedule->schedule->time_start .
+                            " - ". $medical->doctorschedule->schedule->time_end }}</td>
+                        <td>{{ $medical->doctorschedule->doctor->name }}</td>
                         <td>
-                            <a href="{{ route('records.edit', ['record' => $record->id]) }}"
+                            <a href="{{ route('records.edit', ['record' => $medical->id]) }}"
                                 class="btn btn-md btn-success mr-5">Edit</a>
-                            <form method="POST" action="{{ route('records.destroy', ['record' => $record->id]) }}"
+                            <form method="POST" action="{{ route('records.destroy', ['record' => $medical->id]) }}"
                                 style="display:inline;">
                                 @csrf
                                 @method('DELETE')

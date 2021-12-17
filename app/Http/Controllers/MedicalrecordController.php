@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\MedicalrecordRequest;
+use App\Models\DoctorSchedule;
 use App\Models\MedicalRecord;
+use App\Models\Patient;
 use Illuminate\Http\Request;
 
 class MedicalrecordController extends Controller
@@ -17,7 +19,6 @@ class MedicalrecordController extends Controller
     {
         $medicals = MedicalRecord::all();
         $title = "Medical Record Lists";
-
         return view('medical_records.index', compact('title', 'medicals'));
     }
 
@@ -28,7 +29,11 @@ class MedicalrecordController extends Controller
      */
     public function create()
     {
-        return view('medical_records.create');
+        $patients = Patient::all();
+        $title = "Add new patient medical record";
+        $doctorschedule = DoctorSchedule::all();
+
+        return view('medical_records.create', compact('patients', 'doctorschedule', 'title'));
     }
 
     /**
@@ -42,10 +47,8 @@ class MedicalrecordController extends Controller
         $validated = $request->validated();
         $medical = [
             'patient_id' => $validated['patient_id'],
-            'doctor_schedule_id' => $validated['doctor_shedule_id'],
-            'time_start' => $validated['time_start'],
-            'time_end' => $validated['time_end'],
-            'quota' => $validated['quota'],
+            'doctor_schedule_id' => $validated['doctor_schedule_id'],
+            'type' => $validated['type'],
             'description' => $validated['description'] ?? ''
         ];
 
@@ -70,9 +73,13 @@ class MedicalrecordController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit(MedicalRecord $medicalrecord)
+    public function edit(MedicalRecord $record)
     {
-        return view('medical_records.edit', compact('medicalrecord'));
+        $title = "Edit Medical Record";
+        $patients = Patient::all();
+        $doctorschedule = DoctorSchedule::all();
+
+        return view('medical_records.edit', compact('record', 'title', 'patients', 'doctorschedule'));
     }
 
     /**
@@ -82,11 +89,17 @@ class MedicalrecordController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(MedicalrecordRequest $request, MedicalRecord $medicalrecord)
+    public function update(MedicalrecordRequest $request, MedicalRecord $record)
     {
         $validated = $request->validated();
+        $record->patient_id = $validated['patient_id'];
+        $record->doctor_schedule_id = $validated['doctor_schedule_id'];
+        $record->type = $validated['type'];
+        $record->description = $validated['description'];
 
-        return redirect()->route('medical_records.index')->with('message', 'Berhasil memperbaharui data!');
+        $record->save();
+
+        return redirect()->route('records.index')->with('message', 'Berhasil memperbaharui data!');
     }
 
     /**
@@ -95,9 +108,9 @@ class MedicalrecordController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy(MedicalRecord $medicalrecord)
+    public function destroy(MedicalRecord $record)
     {
-        $medicalrecord->delete();
-        return redirect()->route('medical_records.index')->with('message', 'Berhasil menghapus data!');
+        $record->delete();
+        return redirect()->route('records.index')->with('message', 'Berhasil menghapus data!');
     }
 }
