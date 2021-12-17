@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\MedicalrecordRequest;
 use App\Models\MedicalRecord;
 use Illuminate\Http\Request;
 
@@ -36,16 +37,16 @@ class MedicalrecordController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(MedicalrecordRequest $request)
     {
         $validated = $request->validated();
         $medical = [
-            'patient_id' => $validated->patient_id,
-            'doctor_schedule_id' => $validated->doctor_shedule_id,
-            'time_start' => $validated->time_start,
-            'time_end' => $validated->time_end,
-            'quota' => $validated->quota,
-            'description' => $validated->description ?? ''
+            'patient_id' => $validated['patient_id'],
+            'doctor_schedule_id' => $validated['doctor_shedule_id'],
+            'time_start' => $validated['time_start'],
+            'time_end' => $validated['time_end'],
+            'quota' => $validated['quota'],
+            'description' => $validated['description'] ?? ''
         ];
 
         MedicalRecord::create($medical);
@@ -81,20 +82,11 @@ class MedicalrecordController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(MedicalrecordRequest $request, MedicalRecord $medicalrecord)
     {
         $validated = $request->validated();
-        $medical = [
-            'patient_id' => $validated->patient_id,
-            'doctor_schedule_id' => $validated->doctor_shedule_id,
-            'time_start' => $validated->time_start,
-            'time_end' => $validated->time_end,
-            'quota' => $validated->quota,
-            'description' => $validated->description ?? ''
-        ];
 
-        MedicalRecord::create($medical);
-        return redirect()->route('medical_records.index')->with('message', 'Berhasil menambah data!');
+        return redirect()->route('medical_records.index')->with('message', 'Berhasil memperbaharui data!');
     }
 
     /**

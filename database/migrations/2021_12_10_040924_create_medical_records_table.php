@@ -13,7 +13,7 @@ class CreateMedicalRecordsTable extends Migration
      */
     public function up()
     {
-        Schema::create('medical_records', function (Blueprint $table) {
+        Schema::create('medicalrecords', function (Blueprint $table) {
             $table->id();
             $table->foreignId('patient_id')->constrained()->onUpdate('cascade')->onDelete('cascade');
             $table->foreignId('doctor_schedule_id')->constrained()->on('doctor_schedule')->onUpdate('cascade')->onDelete('cascade');

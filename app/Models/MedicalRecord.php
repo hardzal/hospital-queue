@@ -11,8 +11,13 @@ class Medicalrecord extends Model
 
     protected $guarded = [];
 
-    public function doctorSchedules()
+    public function doctorschedule()
     {
-        return $this->belongsTo(DoctorSchedule::class);
+        return $this->belongsTo(DoctorSchedule::class, 'doctor_schedule_id');
+    }
+
+    public function patient()
+    {
+        return $this->belongsTo(Patient::class);
     }
 }

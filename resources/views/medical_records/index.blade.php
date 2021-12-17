@@ -27,7 +27,7 @@
         </div>
         <!-- /.card-header -->
         <div class="card-body">
-            <a href="{{ route('patients.create') }}" class="btn btn-md btn-primary mb-3">Tambah Pasien</a>
+            <a href="{{ route('records.create') }}" class="btn btn-md btn-primary mb-3">Tambah Data Rekam Medik</a>
             @if(session()->has('message'))
             <div class="alert alert-success alert-dismissible fade show" role="alert">
                 {{ session("message") }}
@@ -43,25 +43,23 @@
                 <thead>
                     <tr>
                         <th width="5" style="text-align:center;">No</th>
-                        <th>Email</th>
-                        <th>Nama Lengkap</th>
-                        <th>No HP</th>
-                        <th>Jenis Kelamin</th>
+                        <th>Nama Pasien</th>
+                        <th>Jadwal</th>
+                        <th>Nama Dokter</th>
                         <th>Aksi</th>
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach($patients as $patient)
+                    @foreach($medicals as $medical)
                     <tr>
                         <td style="text-align:center;">{{ $loop->iteration }}</td>
-                        <td>{{ $patient->email }}</td>
-                        <td>{{ $patient->name }}</td>
-                        <td>{{ $patient->no_hp }}</td>
-                        <td>{{ $patient->gender == 'P' ? "Perempuan" : 'Laki - Laki'}}</td>
+                        <td>{{ $medical->patient->name }}</td>
+                        <td>{{ $medical->doctorSchedule->schedule->day_start . "s/d".  $medical->doctorSchedule->schedule->day_end }}</td>
+                        <td>{{ $medical->no_hp }}</td>
                         <td>
-                            <a href="{{ route('patients.edit', ['patient' => $patient->id]) }}"
+                            <a href="{{ route('records.edit', ['record' => $record->id]) }}"
                                 class="btn btn-md btn-success mr-5">Edit</a>
-                            <form method="POST" action="{{ route('patients.destroy', ['patient' => $patient->id]) }}"
+                            <form method="POST" action="{{ route('records.destroy', ['record' => $record->id]) }}"
                                 style="display:inline;">
                                 @csrf
                                 @method('DELETE')

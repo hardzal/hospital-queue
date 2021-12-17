@@ -28,7 +28,7 @@ class DoctorSchedule extends Model
         return $this->belongsTo(Schedule::class, 'schedule_id');
     }
 
-    public function medicalRecords()
+    public function medicalrecords()
     {
         return $this->hasMany(Medicarecord::class);
     }
