@@ -18,31 +18,38 @@ class PatientTableSeeder extends Seeder
             'gender' => 'P',
             'name' => 'Pasien Baru',
             'email' => 'randomemail@gmail.com',
-            'no_hp' => 0213123131
+            'no_hp' => 0213123131,
+            'password' => bcrypt('password')
         ]);
         Patient::create([
             'gender' => 'L',
             'name' => 'Pasien Sepuh',
             'email' => 'randomemail1@gmail.com',
-            'no_hp' => 0213123141
+            'no_hp' => 0213123141,
+            'password' => bcrypt('password')
         ]);
         Patient::create([
             'gender' => 'L',
             'name' => 'Pasien Senior',
             'email' => 'randomemai2l@gmail.com',
-            'no_hp' => 0213123531
+            'no_hp' => 0213123531,
+            'password' => bcrypt('password')
+
         ]);
         Patient::create([
             'gender' => 'P',
             'name' => 'Pasien-KUN',
             'email' => 'randomemail3@gmail.com',
-            'no_hp' => 0213125531
+            'no_hp' => 0213125531,
+            'password' => bcrypt('password')
+
         ]);
         Patient::create([
             'gender' => 'L',
             'name' => 'Pasien SUS',
             'email' => 'randomemail6@gmail.com',
-            'no_hp' => 0213123661
+            'no_hp' => 0213123661,
+            'password' => bcrypt('password')
         ]);
     }
 }

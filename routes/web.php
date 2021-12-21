@@ -6,10 +6,11 @@ use App\Http\Controllers\DoctorscheduleController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\MedicalrecordController;
 use App\Http\Controllers\PatientController;
+use App\Http\Controllers\PatientLoginController;
+use App\Http\Controllers\PatientRegisterController;
 use App\Http\Controllers\PolyclinicController;
 use App\Http\Controllers\ScheduleController;
 use App\Http\Controllers\UserController;
-use App\Models\Polyclinic;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -23,21 +24,30 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', [DashboardController::class, 'index'])->name('dashboard.index');
+Route::get('/login', [PatientLoginController::class, 'showLoginForm'])->name('patient.loginForm');
+Route::get('/register', [PatientLoginController::class, 'showRegisterForm'])->name('patient.registerForm');
+Route::post('/login', [PatientLoginController::class, 'login'])->name('patient.login');
+Route::post('/register', [PatientLoginController::class, 'register'])->name('patient.register');
+Route::get('/logout', [PatientLoginController::class, 'logout'])->name('patient.logout');
+
+Route::get('/', [PatientLoginController::class, 'index'])->name('home');
 
 // login non pasien
-Auth::routes(['register' => false]);
+Route::prefix('mimin')->group(function () {
+    Auth::routes(['register' => false]);
+});
 
-// login pasien
-Route::get('pasien/login', [LoginController::class, 'login_pasien']);
+// login user (admin, staff, dokter)
+Route::group(['prefix' => 'inside', 'middleware' => 'auth'], function () {
+    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard.index');
 
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
-
-Route::resource('patients', PatientController::class);
-Route::resource('polyclinics', PolyclinicController::class);
-Route::resource('users', UserController::class);
-Route::resource('records', MedicalrecordController::class);
-Route::resource('doctorschedules', DoctorScheduleController::class);
-Route::resource('schedules', ScheduleController::class);
-
+    Route::middleware('admin')->group(function () {
+        Route::resource('patients', PatientController::class);
+        Route::resource('polyclinics', PolyclinicController::class);
+        Route::resource('records', MedicalrecordController::class);
+        Route::resource('doctorschedules', DoctorScheduleController::class);
+        Route::resource('schedules', ScheduleController::class);
+        Route::resource('users', UserController::class);
+    });
+});
 Route::get('print', [HomeController::class, 'test_print']);

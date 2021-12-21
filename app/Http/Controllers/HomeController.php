@@ -17,7 +17,7 @@ class HomeController extends Controller
      */
     public function __construct()
     {
-        // $this->middleware('auth');
+        $this->middleware('patient');
     }
 
     /**
@@ -27,7 +27,15 @@ class HomeController extends Controller
      */
     public function index()
     {
-        return view('home');
+        return view('home.index');
+    }
+
+    public function profile()
+    {
+    }
+
+    public function histories()
+    {
     }
 
     public function test_print()
