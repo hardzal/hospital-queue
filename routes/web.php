@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\DoctorController;
 use App\Http\Controllers\DoctorscheduleController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\MedicalrecordController;
@@ -9,6 +10,7 @@ use App\Http\Controllers\PatientController;
 use App\Http\Controllers\PatientLoginController;
 use App\Http\Controllers\PatientRegisterController;
 use App\Http\Controllers\PolyclinicController;
+use App\Http\Controllers\QueueController;
 use App\Http\Controllers\ScheduleController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
@@ -28,9 +30,15 @@ Route::get('/login', [PatientLoginController::class, 'showLoginForm'])->name('pa
 Route::get('/register', [PatientLoginController::class, 'showRegisterForm'])->name('patient.registerForm');
 Route::post('/login', [PatientLoginController::class, 'login'])->name('patient.login');
 Route::post('/register', [PatientLoginController::class, 'register'])->name('patient.register');
-Route::get('/logout', [PatientLoginController::class, 'logout'])->name('patient.logout');
+Route::post('/logout', [PatientLoginController::class, 'logout'])->name('patient.logout');
 
 Route::get('/', [PatientLoginController::class, 'index'])->name('home');
+Route::get('/home', [HomeController::class, 'index'])->name('patient.home');
+Route::get('/profile', [HomeController::class, 'profile'])->name('patient.profile');
+Route::get('/histories', [HomeController::class, 'histories'])->name('patient.histories');
+
+Route::get('/queues', [QueueController::class, 'index'])->name('queues');
+Route::get('/schedules', [DoctorController::class, 'index'])->name('doctor.schedule');
 
 // login non pasien
 Route::prefix('mimin')->group(function () {

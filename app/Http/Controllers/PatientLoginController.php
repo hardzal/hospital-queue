@@ -20,7 +20,7 @@ class PatientLoginController extends Controller
     public function index()
     {
         $title = "Login Pasien";
-        return view('welcome', compact('title'));
+        return view('home', compact('title'));
     }
 
     public function showLoginForm()
