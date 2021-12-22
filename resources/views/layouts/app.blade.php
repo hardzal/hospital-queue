@@ -48,6 +48,15 @@
                         <li class="nav-item">
                             <a class="nav-link" href="{{ route('login') }}">{{ __('Login Admin') }}</a>
                         </li>
+                        @auth('patient')
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ route('patient.home') }}">{{ __('Dashboard User') }}</a>
+                        </li>
+                        @else
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ route('patient.login') }}">{{ __('Login User') }}</a>
+                        </li>
+                        @endauth
                         @endif
 
                         @if (Route::has('register'))

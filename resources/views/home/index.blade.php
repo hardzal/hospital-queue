@@ -26,7 +26,7 @@
                     Anda belum mendaftar kedalam antrian!
                 </p>
 
-                <a href="#" class="btn btn-primary">Daftar Antrian Baru</a>
+                <a href="{{ route('queue.register') }}" class="btn btn-primary">Daftar Antrian Baru</a>
             </div>
         </div>
     </div>
@@ -86,15 +86,15 @@
 </div>
 <div class="row">
     <div class="col-lg-8">
-        <div class="card card-info card-outline">
+        <div class="card card-primary card-outline">
             <div class="card-header">
                 Daftar Jadwal Dokter
             </div>
         </div>
     </div>
     <div class="col-lg-4">
-        <div clas="card">
-            <div class="card-header card-dark card-outline">
+        <div class="card card-info card-outline">
+            <div class="card-header">
                 Pesan WhatsApp
             </div>
         </div>

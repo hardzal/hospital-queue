@@ -1,6 +1,5 @@
 <?php
 
-use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DoctorController;
 use App\Http\Controllers\DoctorscheduleController;
@@ -8,11 +7,11 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\MedicalrecordController;
 use App\Http\Controllers\PatientController;
 use App\Http\Controllers\PatientLoginController;
-use App\Http\Controllers\PatientRegisterController;
 use App\Http\Controllers\PolyclinicController;
 use App\Http\Controllers\QueueController;
 use App\Http\Controllers\ScheduleController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\WhatsAppController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -38,7 +37,18 @@ Route::get('/profile', [HomeController::class, 'profile'])->name('patient.profil
 Route::get('/histories', [HomeController::class, 'histories'])->name('patient.histories');
 
 Route::get('/queues', [QueueController::class, 'index'])->name('queues');
+Route::get('/queue/register', [QueueController::class, 'register'])->name('queue.register');
+Route::post('/queue', [QueueController::class, 'store'])->name('queue.store');
 Route::get('/schedules', [DoctorController::class, 'index'])->name('doctor.schedule');
+
+// antrian routes
+// 1. User mendaftar antrian
+// 2. Antrian user masuk ke database
+// 3. Daftar antrian baru tampil ke layar
+// 4. jika antrian berganti maka layar akan memperbaharui data antrian
+
+// routes mengecek antrian
+// daftar rekam medis (dashboard user)
 
 // login non pasien
 Route::prefix('mimin')->group(function () {
@@ -57,5 +67,7 @@ Route::group(['prefix' => 'inside', 'middleware' => 'auth'], function () {
         Route::resource('schedules', ScheduleController::class);
         Route::resource('users', UserController::class);
     });
+
+    Route::resource('whatsapp', WhatsAppController::class);
 });
 Route::get('print', [HomeController::class, 'test_print']);

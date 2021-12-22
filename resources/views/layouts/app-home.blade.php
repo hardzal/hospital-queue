@@ -40,6 +40,9 @@
                         </li>
                         @auth('patient')
                         <li class="nav-item">
+                            <a href="{{ route('patient.home') }}" class="nav-link">Dashboard</a>
+                        </li>
+                        <li class="nav-item">
                             <a href="{{ route('patient.profile') }}" class="nav-link">Profil</a>
                         </li>
                         <li class="nav-item">
