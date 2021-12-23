@@ -24,7 +24,7 @@ class RedirectIfAuthenticated
         foreach ($guards as $guard) {
             if ($guard == 'patient') {
                 if (Auth::guard($guard)->check()) {
-                    return redirect()->route('home');
+                    return redirect()->route('patient.home');
                 }
             } else {
                 if (Auth::guard($guard)->check()) {

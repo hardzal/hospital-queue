@@ -12,6 +12,7 @@ use App\Http\Controllers\QueueController;
 use App\Http\Controllers\ScheduleController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\WhatsAppController;
+use App\Models\Queue;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -32,14 +33,18 @@ Route::post('/register', [PatientLoginController::class, 'register'])->name('pat
 Route::post('/logout', [PatientLoginController::class, 'logout'])->name('patient.logout');
 
 Route::get('/', [PatientLoginController::class, 'index'])->name('home');
-Route::get('/home', [HomeController::class, 'index'])->name('patient.home');
-Route::get('/profile', [HomeController::class, 'profile'])->name('patient.profile');
-Route::get('/histories', [HomeController::class, 'histories'])->name('patient.histories');
-
 Route::get('/queues', [QueueController::class, 'index'])->name('queues');
-Route::get('/queue/register', [QueueController::class, 'register'])->name('queue.register');
-Route::post('/queue', [QueueController::class, 'store'])->name('queue.store');
 Route::get('/schedules', [DoctorController::class, 'index'])->name('doctor.schedule');
+
+Route::group(['middleware' => 'auth:patient'], function () {
+    Route::get('/queue/register', [QueueController::class, 'register'])->name('queue.register');
+    Route::post('/queue', [QueueController::class, 'store'])->name('queue.store');
+    Route::get('/getSchedules', [QueueController::class, 'getSchedules'])->name('queue.schedules');
+
+    Route::get('/home', [HomeController::class, 'index'])->name('patient.home');
+    Route::get('/profile', [HomeController::class, 'profile'])->name('patient.profile');
+    Route::get('/histories', [HomeController::class, 'histories'])->name('patient.histories');
+});
 
 // antrian routes
 // 1. User mendaftar antrian

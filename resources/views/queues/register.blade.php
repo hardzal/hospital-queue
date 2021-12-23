@@ -20,15 +20,36 @@
             <div class="card-header">
                 <h3>Pendaftaran Antrian</h3>
             </div>
-            <div class="card-body">
-                <form method="POST" action="{{ route('queue.store') }}">
+            <form method="POST" action="{{ route('queue.store') }}">
+                <div class="card-body">
                     @csrf
                     <div class="form-group">
-                        <label for=""></label>
+                        <label for="polyclinic_id">Poliklinik</label>
+                        <select name="polyclinic_id" class="form-control" id="polyclinic_id">
+                            <option>Pilih Poly</option>
+                            @foreach ($polyclinics as $polyclinic)
+                            <option value="{{ $polyclinic->id }}">{{ $polyclinic->name }}</option>
+                            @endforeach
+                        </select>
                     </div>
-                </form>
-            </div>
+                    <div class="form-group">
+                        <label for="doctor_schedule_id">Jadwal Dokter</label>
+                        <select name="doctor_schedule_id" class="form-control" id="doctor_schedule_id">
+                            <option>Pilih Jadwal Dokter</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="card-footer">
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                </div>
+            </form>
         </div>
     </div>
 </div>
 @endsection
+
+@push('scripts')
+<script type="text/javascript">
+
+</script>
+@endpush
