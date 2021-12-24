@@ -78,7 +78,7 @@
                 <!-- Right navbar links -->
                 <ul class="order-1 order-md-3 navbar-nav navbar-no-expand ml-auto">
                     <li class="nav-item">
-                        <a class="nav-link" href="{{ route('logout') }}" onclick="event.preventDefault();
+                        <a class="nav-link" href="{{ route('patient.logout') }}" onclick="event.preventDefault();
                                       document.getElementById('logout-form').submit();">
                             <i class="nav-icon fas fa-sign-out-alt"></i>
                         </a>

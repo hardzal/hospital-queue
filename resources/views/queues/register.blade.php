@@ -25,7 +25,8 @@
                     @csrf
                     <div class="form-group">
                         <label for="polyclinic_id">Poliklinik</label>
-                        <select name="polyclinic_id" class="form-control" id="polyclinic_id">
+                        <select name="polyclinic_id" class="form-control @error('polyclinic_id') is-invalid @enderror"
+                            id="polyclinic_id">
                             <option>Pilih Poly</option>
                             @foreach ($polyclinics as $polyclinic)
                             <option value="{{ $polyclinic->id }}">{{ $polyclinic->name }}</option>
@@ -34,10 +35,27 @@
                     </div>
                     <div class="form-group">
                         <label for="doctor_schedule_id">Jadwal Dokter</label>
-                        <select name="doctor_schedule_id" class="form-control" id="doctor_schedule_id">
+                        <select name="doctor_schedule_id"
+                            class="form-control @error('doctor_schedule_id') is-invalid @enderror'"
+                            id="doctor_schedule_id">
                             <option>Pilih Jadwal Dokter</option>
                         </select>
+                        @error('doctor_schedule_id')
+                        <div class="invalid-feedback">
+                            {{ $message }}
+                        </div>
+                        @enderror
                     </div>
+
+                    <div class="form-group">
+                        <label for="date_schedule_id">Tanggal Antrian</label>
+                        <select name="date_schedule_id"
+                            class="form-control @error('date_schedule_id') is-invalid @enderror" id="date_schedule_id">
+                            <option value="">Pilih Tanggal</option>
+                        </select>
+                    </div>
+                    <input type="hidden" name="patient_id" value="{{ auth()->user()->id }}" />
+                    <input type="hidden" name="status" value=1 />
                 </div>
                 <div class="card-footer">
                     <button type="submit" class="btn btn-primary">Submit</button>
@@ -50,6 +68,69 @@
 
 @push('scripts')
 <script type="text/javascript">
+    $(document).ready(function() {
+        $('#polyclinic_id').on('change', function() {
+            $('#doctor_schedule_id')
+            .find('option')
+            .remove()
+            .end()
+            .append('<option value="">Pilih Jadwal</option>');
 
+            let polyclinic_id = document.getElementById('polyclinic_id').value;
+            const url = "{{ url('getSchedules') }}/" + polyclinic_id;
+
+            $.get(url, function(data, status) {
+                if(Object.keys(data.data).length == 0) {
+                    let o = new Option("Jadwal belum tersedia", "");
+                    $('#doctor_schedule_id').append(o);
+                }
+
+                for (let item of data.data) {
+                    let o = new Option(item.doctor_name + " - "  + item.schedule, item.id);
+                    $('#doctor_schedule_id').append(o);
+                }
+            });
+        });
+
+        $('#doctor_schedule_id').on('change', function() {
+            $('#date_schedule_id')
+            .find('option')
+            .remove()
+            .end()
+            .append('<option value="">Pilih Tanggal</option>');
+
+            const tgl = new Date();
+            const time_date = (tgl.getTime()) / 1000;
+            let doctor_schedule = document.getElementById('doctor_schedule_id');
+            const value = (doctor_schedule.options[doctor_schedule.selectedIndex].text).split(" ");
+
+            const days = ["Senin", "Selasa", "Rabu", "Kamis", "Jum'at", "Sabtu", "Minggu"];
+            let day_period = [value[3], value[5]];
+            let day = [];
+            day_period[0] = days.indexOf(day_period[0]);
+            day_period[1] = days.indexOf(day_period[1]);
+            for(let i = day_period[0]; i <= day_period[1]; i++) {
+                day.push(i);
+            }
+
+            const url = "{{ url('getDate') }}/" + time_date;
+            $.get(url, function(data, status) {
+                if(Object.keys(data.data).length == 0) {
+                    let o = new Option("Jadwal belum tersedia", "");
+                    $('#date_schedule_id').append(o);
+                }
+
+                for (let item of data.data) {
+                    const time = new Date(item);
+                    if(day.includes(time.getDay()-1)) {
+                        const timeFormat = (time.getTime())/1000;
+                        let o = new Option(item, timeFormat);
+                        $('#date_schedule_id').append(o);
+                    }
+                }
+            });
+        });
+
+    });
 </script>
 @endpush

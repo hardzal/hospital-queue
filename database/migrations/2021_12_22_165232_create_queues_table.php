@@ -15,6 +15,11 @@ class CreateQueuesTable extends Migration
     {
         Schema::create('queues', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('patient_id')->constrained()->onDelete('cascade')->onUpdate('cascade');
+            $table->foreignId('polyclinic_id')->constrained()->onDelete('cascade')->onUpdate('cascade');
+            $table->foreignId('doctor_schedule_id')->constrained()->on('doctor_schedule')->onDelete('cascade')->onUpdate('cascade');
+            $table->bigInteger('queue_position')->nullable();
+            $table->integer('status')->default(0);
             $table->timestamps();
         });
     }

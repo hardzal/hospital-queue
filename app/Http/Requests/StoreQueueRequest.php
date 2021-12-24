@@ -24,7 +24,11 @@ class StoreQueueRequest extends FormRequest
     public function rules()
     {
         return [
-            //
+            'patient_id' => 'required',
+            'polyclinic' => 'required',
+            'doctor_schedule_id' => 'required',
+            'queue_position' => 'integer',
+            'status' => 'integer'
         ];
     }
 }

@@ -38,9 +38,11 @@ Route::get('/schedules', [DoctorController::class, 'index'])->name('doctor.sched
 
 Route::group(['middleware' => 'auth:patient'], function () {
     Route::get('/queue/register', [QueueController::class, 'register'])->name('queue.register');
-    Route::post('/queue', [QueueController::class, 'store'])->name('queue.store');
-    Route::get('/getSchedules', [QueueController::class, 'getSchedules'])->name('queue.schedules');
 
+    Route::get('/queue/{queue}', [QueueController::class, 'show'])->name('queue.show');
+    Route::post('/queue', [QueueController::class, 'store'])->name('queue.store');
+    Route::get('/getSchedules/{poly_id}', [QueueController::class, 'getSchedules'])->name('queue.schedules');
+    Route::get('/getDate/{time}', [QueueController::class, 'getDate'])->name('queues.time');
     Route::get('/home', [HomeController::class, 'index'])->name('patient.home');
     Route::get('/profile', [HomeController::class, 'profile'])->name('patient.profile');
     Route::get('/histories', [HomeController::class, 'histories'])->name('patient.histories');
