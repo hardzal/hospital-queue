@@ -40,4 +40,9 @@ class DoctorSchedule extends Model
             ->where('schedule_id', $data['schedule_id'])
             ->get();
     }
+
+    public function queues()
+    {
+        return $this->hasMany(MQueue::class);
+    }
 }

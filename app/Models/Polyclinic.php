@@ -9,4 +9,9 @@ class Polyclinic extends Model
 {
     use HasFactory;
     protected $guarded = [];
+
+    public function queues()
+    {
+        return $this->hasMany(MQueue::class);
+    }
 }

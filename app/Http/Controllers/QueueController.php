@@ -19,7 +19,8 @@ class QueueController extends Controller
     public function index()
     {
         $title = "Daftar Antrian Saat ini";
-        return view('queues.index', compact('title'));
+        $queues = MQueue::all();
+        return view('queues.index', compact('title', 'queues'));
     }
 
     public function register()
@@ -32,24 +33,37 @@ class QueueController extends Controller
     public function store(StoreQueueRequest $request)
     {
         $validated = $request->validated();
-        $queue_position = 0;
+        $queue_position = 1;
         $polyclinic_id = $request['polyclinic_id'];
-        $date_time = $request['date_queue'];
         date_default_timezone_set('Asia/Jakarta');
 
-        $last = MQueue::where('polyclinic_id', $polyclinic_id)->where('created_at', date('Y-m-d H:m:s'));
+        $last = MQueue::where('polyclinic_id', $polyclinic_id)
+            ->where('queue_date', $validated['queue_date'])
+            ->orderBy('queue_date', 'DESC');
+
+
+        if ($last->count() > 0) {
+            $doctor = DoctorSchedule::find($validated['doctor_schedule_id']);
+            $jumlah = $last->count();
+            if ($jumlah + 1 > $doctor->quota) {
+                return redirect()->route('queues')->with('error', 'Antrian sudah penuh!');
+            }
+
+            $queue_position = $last->get()->first()->queue_position + 1;
+        }
 
         $data = [
             'patient_id' => $validated['patient_id'],
             'polyclinic_id' => $polyclinic_id,
             'doctor_schedule_id' => $validated['doctor_schedule_id'],
+            'queue_date' => $validated['queue_date'],
             'queue_position' => $queue_position,
             'status' => $validated['status']
         ];
 
-        MQueue::create($data);
+        $queue = MQueue::create($data);
 
-        return redirect()->route('queue.show')->with('success', 'Berhasil mendaftar ke dalam antrian');
+        return redirect()->route('queue.show', ['queue' => $queue->id])->with('success', 'Berhasil mendaftar ke dalam antrian');
     }
 
     public function getSchedules($poly_id)
@@ -78,10 +92,11 @@ class QueueController extends Controller
         return response()->json($data);
     }
 
-    public function show()
+    public function show(MQueue $queue)
     {
         $title = "Detail Antrian";
-        return view('queues.show', compact('title'));
+
+        return view('queues.show', compact('title', 'queue'));
     }
 
     public function getDate($time)

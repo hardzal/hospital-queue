@@ -22,7 +22,36 @@
             </div>
 
             <div class="card-body">
-
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th>No</th>
+                            <th>Poly</th>
+                            <th>Nama Dokter</th>
+                            <th>Jadwal Dokter</th>
+                            <th>Quota</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach($doctorschedules as $doctorschedule)
+                        <tr>
+                            <td>{{ $loop->iteration }}</td>
+                            <td>{{ $doctorschedule->polyclinic->name }}</td>
+                            <td>{{ $doctorschedule->doctor->name }}</td>
+                            <td>{{ $doctorschedule->schedule->day_start. " s/d ". $doctorschedule->schedule->day_end . "
+                                - ".
+                                $doctorschedule->schedule->time_start . " - ".
+                                $doctorschedule->schedule->time_end }}</td>
+                            <td>@if($doctorschedule->quota == 0)
+                                <span class="badge badge-danger">PENUH</span>
+                                @else
+                                <span class="badge badge-success">{{ $doctorschedule->quota }}</span>
+                                @endif
+                            </td>
+                        </tr>
+                        @endforeach
+                    </tbody>
+                </table>
             </div>
         </div>
     </div>

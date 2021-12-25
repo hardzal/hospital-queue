@@ -13,7 +13,7 @@ class StoreQueueRequest extends FormRequest
      */
     public function authorize()
     {
-        return false;
+        return true;
     }
 
     /**
@@ -25,9 +25,10 @@ class StoreQueueRequest extends FormRequest
     {
         return [
             'patient_id' => 'required',
-            'polyclinic' => 'required',
+            'polyclinic_id' => 'required',
             'doctor_schedule_id' => 'required',
             'queue_position' => 'integer',
+            'queue_date' => 'required',
             'status' => 'integer'
         ];
     }

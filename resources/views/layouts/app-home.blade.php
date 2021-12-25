@@ -51,6 +51,9 @@
                         <li class="nav-item">
                             <a href="{{ route('doctor.schedule') }}" class="nav-link">Jadwal Dokter</a>
                         </li>
+                        <li class="nav-item">
+                            <a href="{{ route('queues') }}" class="nav-link">Antrian</a>
+                        </li>
                         @else
                         <li class="nav-item">
                             <a href="{{ route('patient.loginForm') }}" class="nav-link">Login</a>

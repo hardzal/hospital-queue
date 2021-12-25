@@ -48,9 +48,9 @@
                     </div>
 
                     <div class="form-group">
-                        <label for="date_schedule_id">Tanggal Antrian</label>
-                        <select name="date_schedule_id"
-                            class="form-control @error('date_schedule_id') is-invalid @enderror" id="date_schedule_id">
+                        <label for="queue_date">Tanggal Antrian</label>
+                        <select name="queue_date" class="form-control @error('queue_date') is-invalid @enderror"
+                            id="queue_date">
                             <option value="">Pilih Tanggal</option>
                         </select>
                     </div>
@@ -117,15 +117,14 @@
             $.get(url, function(data, status) {
                 if(Object.keys(data.data).length == 0) {
                     let o = new Option("Jadwal belum tersedia", "");
-                    $('#date_schedule_id').append(o);
+                    $('#queue_date').append(o);
                 }
 
                 for (let item of data.data) {
                     const time = new Date(item);
                     if(day.includes(time.getDay()-1)) {
-                        const timeFormat = (time.getTime())/1000;
-                        let o = new Option(item, timeFormat);
-                        $('#date_schedule_id').append(o);
+                        let o = new Option(item, item);
+                        $('#queue_date').append(o);
                     }
                 }
             });

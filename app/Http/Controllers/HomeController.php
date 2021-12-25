@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\DoctorSchedule;
+use App\Models\MQueue;
 use Illuminate\Http\Request;
 use Mike42\Escpos\Printer;
 use Mike42\Escpos\PrintConnectors\FilePrintConnector;
@@ -28,7 +30,9 @@ class HomeController extends Controller
     public function index()
     {
         $title = "Dashboard";
-        return view('home.index', compact('title'));
+        $queues = MQueue::all();
+        $doctorschedules = DoctorSchedule::all();
+        return view('home.index', compact('title', 'queues', 'doctorschedules'));
     }
 
     public function profile()

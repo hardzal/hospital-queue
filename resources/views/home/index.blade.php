@@ -51,33 +51,25 @@
                         </tr>
                     </thead>
                     <tbody>
+                        @foreach($queues as $queue)
                         <tr>
-                            <td>1</td>
-                            <td>0001</td>
-                            <td>AP123</td>
-                            <td>Poli Anak</td>
-                            <td>Dr AA Sp.d</td>
-                            <td>28/12/2021 - 15:00</td>
-                            <td><span class="badge badge-warning">waiting</span></td>
+                            <td>{{ $loop->iteration }}</td>
+                            <td>{{ $queue->queue_position }}</td>
+                            <td>{{ substr($queue->polyclinic->code, 0, 2) . $queue->queue_position }}</td>
+                            <td>{{ $queue->polyclinic->name }}</td>
+                            <td>{{ $queue->doctorschedule->doctor->name }}</td>
+                            <td>{{ $queue->queue_date }}</td>
+                            <td>
+                                @if($queue->status == 1)
+                                <span class="badge badge-warning">waiting</span>
+                                @elseif($queue->status == 2)
+                                <span class="badge badge-success">success</span>
+                                @else
+                                <span class="badge badge-danger">skipped</span>
+                                @endif
+                            </td>
                         </tr>
-                        <tr>
-                            <td>2</td>
-                            <td>0001</td>
-                            <td>AP123</td>
-                            <td>Poli Anak</td>
-                            <td>Dr AA Sp.d</td>
-                            <td>28/12/2021 - 15:00</td>
-                            <td><span class="badge badge-success">selesai</span></td>
-                        </tr>
-                        <tr>
-                            <td>3</td>
-                            <td>0001</td>
-                            <td>AP123</td>
-                            <td>Poli Anak</td>
-                            <td>Dr AA Sp.d</td>
-                            <td>28/12/2021 - 15:00</td>
-                            <td><span class="badge badge-success">selesai</span></td>
-                        </tr>
+                        @endforeach
                     </tbody>
                 </table>
             </div>
@@ -89,6 +81,38 @@
         <div class="card card-primary card-outline">
             <div class="card-header">
                 Daftar Jadwal Dokter
+            </div>
+            <div class="card-body">
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th>No</th>
+                            <th>Poly</th>
+                            <th>Nama Dokter</th>
+                            <th>Jadwal Dokter</th>
+                            <th>Quota</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach($doctorschedules as $doctorschedule)
+                        <tr>
+                            <td>{{ $loop->iteration }}</td>
+                            <td>{{ $doctorschedule->polyclinic->name }}</td>
+                            <td>{{ $doctorschedule->doctor->name }}</td>
+                            <td>{{ $doctorschedule->schedule->day_start. " s/d ". $doctorschedule->schedule->day_end . "
+                                - ".
+                                $doctorschedule->schedule->time_start . " - ".
+                                $doctorschedule->schedule->time_end }}</td>
+                            <td>@if($doctorschedule->quota == 0)
+                                <span class="badge badge-danger">PENUH</span>
+                                @else
+                                <span class="badge badge-success">{{ $doctorschedule->quota }}</span>
+                                @endif
+                            </td>
+                        </tr>
+                        @endforeach
+                    </tbody>
+                </table>
             </div>
         </div>
     </div>
