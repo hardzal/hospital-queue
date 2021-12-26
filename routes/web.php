@@ -30,7 +30,7 @@ Route::get('/login', [PatientLoginController::class, 'showLoginForm'])->name('pa
 Route::get('/register', [PatientLoginController::class, 'showRegisterForm'])->name('patient.registerForm');
 Route::post('/login', [PatientLoginController::class, 'login'])->name('patient.login');
 Route::post('/register', [PatientLoginController::class, 'register'])->name('patient.register');
-Route::post('/logout', [PatientLoginController::class, 'logout'])->name('patient.logout');
+Route::post('/logout', [PatientLoginController::class, 'postLogout'])->name('patient.logout');
 
 Route::get('/', [PatientLoginController::class, 'index'])->name('home');
 Route::get('/queues', [QueueController::class, 'index'])->name('queues');
@@ -76,5 +76,8 @@ Route::group(['prefix' => 'inside', 'middleware' => 'auth'], function () {
     });
 
     Route::resource('whatsapp', WhatsAppController::class);
+    Route::get('/queues/list', [QueueController::class, 'lists'])->name('queues.list');
+    Route::post('/queues/{queue}', [QueueController::class, 'update'])->name('queues.update');
+    Route::delete('/queues/{queue}', [QueueController::class, 'delete'])->name('queues.destroy');
 });
 Route::get('print', [HomeController::class, 'test_print']);

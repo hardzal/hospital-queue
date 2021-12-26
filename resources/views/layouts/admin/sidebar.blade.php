@@ -79,6 +79,12 @@
                 </a>
             </li>
             <li class="nav-item">
+                <a href="{{ route('queues.list') }}" class="nav-link">
+                    <i class="nav-icon fas fa-layer-group"></i>
+                    <p>Queue</p>
+                </a>
+            </li>
+            <li class="nav-item">
                 <a href="{{ route('whatsapp.index') }}" class="nav-link">
                     <i class="nav-icon fas fa-user"></i>
                     <p>

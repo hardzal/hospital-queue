@@ -21,4 +21,9 @@ class MQueue extends Model
     {
         return $this->belongsTo(DoctorSchedule::class, 'doctor_schedule_id');
     }
+
+    public function patient()
+    {
+        return $this->belongsTo(Patient::class);
+    }
 }

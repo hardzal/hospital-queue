@@ -13,7 +13,7 @@ class QueueController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('auth:patient');
+        // $this->middleware('auth:patient');
     }
 
     public function index()
@@ -52,12 +52,19 @@ class QueueController extends Controller
             $queue_position = $last->get()->first()->queue_position + 1;
         }
 
+        $current_position = 0;
+
+        if ($queue_position == 1) {
+            $current_position = 1;
+        }
+
         $data = [
             'patient_id' => $validated['patient_id'],
             'polyclinic_id' => $polyclinic_id,
             'doctor_schedule_id' => $validated['doctor_schedule_id'],
             'queue_date' => $validated['queue_date'],
             'queue_position' => $queue_position,
+            'current_position' => $current_position,
             'status' => $validated['status']
         ];
 
@@ -112,5 +119,21 @@ class QueueController extends Controller
         ];
 
         return response()->json($result);
+    }
+
+    public function lists()
+    {
+        $title = "Daftar Seluruh Antrian";
+        $queues = MQueue::orderBy('queue_date', 'ASC')->with('polyclinic', 'doctorschedule', 'patient')->get();
+        return view('queues.lists', compact('title', 'queues'));
+    }
+
+    public function update(MQueue $queue)
+    {
+        
+    }
+
+    public function delete()
+    {
     }
 }

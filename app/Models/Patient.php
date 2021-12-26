@@ -31,4 +31,9 @@ class Patient extends Authenticatable
     {
         return $this->attributes['password'] = Hash::needsRehash($password) ? Hash::make($password) : $password;;
     }
+
+    public function queues()
+    {
+        return $this->hasMany(MQueue::class);
+    }
 }

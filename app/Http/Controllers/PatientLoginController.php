@@ -14,7 +14,7 @@ class PatientLoginController extends Controller
 
     public function __construct()
     {
-        $this->middleware('guest:patient')->except('logout')->except('index');
+        $this->middleware('guest:patient')->except('postLogout');
     }
 
     public function index()
@@ -58,5 +58,13 @@ class PatientLoginController extends Controller
 
         \App\Models\Patient::create($data);
         return redirect()->route('patient.register')->with('message', 'Successfully register!');
+    }
+
+    public function postLogout()
+    {
+        auth()->guard('patient')->logout();
+        session()->flush();
+
+        return redirect()->route('patient.login');
     }
 }

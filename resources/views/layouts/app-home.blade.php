@@ -82,11 +82,11 @@
                 <ul class="order-1 order-md-3 navbar-nav navbar-no-expand ml-auto">
                     <li class="nav-item">
                         <a class="nav-link" href="{{ route('patient.logout') }}" onclick="event.preventDefault();
-                                      document.getElementById('logout-form').submit();">
+                                      document.getElementById('logout-form').submit();confirm('Are you sure?')">
                             <i class="nav-icon fas fa-sign-out-alt"></i>
                         </a>
-
                         <form id="logout-form" action="{{ route('patient.logout') }}" method="POST" class="d-none">
+
                             @csrf
                         </form>
                     </li>
