@@ -76,7 +76,7 @@ Route::group(['prefix' => 'inside', 'middleware' => 'auth'], function () {
     });
 
     Route::resource('whatsapp', WhatsAppController::class);
-    Route::get('/queues/list', [QueueController::class, 'lists'])->name('queues.list');
+    Route::get('/queues/list/{polyclinic_id?}/{queue_date?}', [QueueController::class, 'lists'])->name('queues.list');
     Route::post('/queues/{queue}', [QueueController::class, 'update'])->name('queues.update');
     Route::delete('/queues/{queue}', [QueueController::class, 'delete'])->name('queues.destroy');
 });

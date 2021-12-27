@@ -27,9 +27,9 @@
         </div>
         <!-- /.card-header -->
         <div class="card-body">
-            @if(session()->has('message'))
+            @if(session()->has('success'))
             <div class="alert alert-success alert-dismissible fade show" role="alert">
-                {{ session("message") }}
+                {{ session("success") }}
             </div>
             @endif
 
@@ -38,6 +38,32 @@
                 {{ session("error") }}
             </div>
             @endif
+            <form method="GET" action="{{ route('queues.list') }}">
+                <div class="row mb-2">
+                    <div class="col-md-6">
+                        <select name="polyclinic_id" class="form-control">
+                            <option value="">Pilih Poliklini</option>
+                            <option value="0">Tampilkan semua antrian</option>
+                            @foreach($polyclinics as $poly)
+                            @if(@$_GET['polyclinic_id'] == $poly->id)
+                            <option value="{{ $poly->id }}" selected>{{ $poly->name }}</option>
+                            @else
+                            <option value="{{ $poly->id }}">{{ $poly->name }}</option>
+                            @endif
+                            @endforeach
+                        </select>
+                    </div>
+                    <div class="col-md-4">
+                        <input type="date" name="queue_date" class="form-control" @if(isset($_GET))
+                            value="{{ $_GET['queue_date'] }}" @endif />
+                    </div>
+                    <div class="col-md-2">
+                        <button class="btn btn-primary" type="submit">
+                            Show
+                        </button>
+                    </div>
+                </div>
+            </form>
             <table id="data_user" class="table table-bordered table-striped">
                 <thead>
                     <tr>
@@ -54,10 +80,10 @@
                 </thead>
                 <tbody>
                     @foreach($queues as $queue)
-                    <tr>
+                    <tr class="bg bg-">
                         <td style="text-align:center;">{{ $loop->iteration }}</td>
                         <td>{{ $queue->queue_position }}</td>
-                        <td>{{ substr($queue->polyclinic->code, 0, 2).$queue->queue_position }}</td>
+                        <td>{{ substr($queue->polyclinic->code, 0, 2). $queue->queue_position }}</td>
                         <td>{{ $queue->patient->name }}</td>
                         <td>{{ $queue->polyclinic->name }}</td>
                         <td>{{ $queue->doctorschedule->doctor->name }}</td>
@@ -74,8 +100,15 @@
                         </td>
                         <td>
                             @if($queue->current_position)
-                            <a href="{{ route('queues.update', ['queue' => $queue->id]) }}"
-                                class="btn btn-md btn-success mr-5">Next</a>
+                            <form method="POST" action="{{ route('queues.update', ['queue' => $queue->id]) }}"
+                                style="display:inline">
+                                @csrf
+                                <input type="hidden" name="poly_id" value="{{ $queue->polyclinic->id }}" />
+                                <input type="hidden" name="queue_date" value="{{ $queue->queue_date }}" />
+                                <input type="hidden" name="current_position" value=0 />
+                                <input type="hidden" name="status" value=2 />
+                                <button class="btn btn-md btn-success mr-5" type="submit">Next</button>
+                            </form>
                             @endif
                             <form method="POST" action="{{ route('queues.destroy', ['queue' => $queue->id]) }}"
                                 style="display:inline;">

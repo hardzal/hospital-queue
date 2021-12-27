@@ -121,19 +121,47 @@ class QueueController extends Controller
         return response()->json($result);
     }
 
-    public function lists()
+    public function lists(Request $request)
     {
         $title = "Daftar Seluruh Antrian";
-        $queues = MQueue::orderBy('queue_date', 'ASC')->with('polyclinic', 'doctorschedule', 'patient')->get();
-        return view('queues.lists', compact('title', 'queues'));
+        $polyclinics = Polyclinic::all();
+
+        $queues = MQueue::orderBy('status', 'ASC')->orderBy('queue_date', 'ASC')->with('polyclinic', 'doctorschedule', 'patient');
+
+        if (isset($request->polyclinic_id)) {
+            $queues = MQueue::orderBy('status', 'ASC')->where('polyclinic_id', $request->polyclinic_id);
+        }
+
+        if (isset($request->polyclinic_id) && isset($request->queue_date)) {
+            $queues = $queues->where('queue_date', $request->queue_date);
+        }
+
+        $queues = $queues->get();
+
+        return view('queues.lists', compact('title', 'queues', 'polyclinics'));
     }
 
-    public function update(MQueue $queue)
+    public function poly(Polyclinic $poly)
     {
-        
+
+        return view('queues.polys');
     }
 
-    public function delete()
+    public function update(Request $request, MQueue $queue)
+    {
+        $request->validate([
+            'current_position' => 'required',
+            'status' => 'required'
+        ]);
+
+        $queue->current_position = $request->current_position;
+        $queue->status = $request->status;
+        $queue->save();
+
+        return redirect()->route('queues.list', ['polyclinic_id' => $request->poly_id, 'queue_date' => $request->queue_date])->with('success', 'Lanjut ke antrian selanjutnya');
+    }
+
+    public function delete(MQueue $queue)
     {
     }
 }
