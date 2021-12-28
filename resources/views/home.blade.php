@@ -14,10 +14,47 @@
                     </div>
                     @endif
 
-                    {{ __('You are logged in!') }}
+                    <h3>Pendaftaran Antrian Rumah Sakit</h3>
+                    <form method="POST" action="{{ route('queue.new') }}">
+                        @csrf
+                        <div class="form-group">
+                            <label for="polyclinic_id">Poliklinik</label>
+                            <select name="polyclinic_id"
+                                class="form-control @error('polyclinic_id') is-invalid @enderror" id="polyclinic_id">
+                                <option>Pilih Poli</option>
+                                @foreach ($polyclinics as $polyclinic)
+                                <option value="{{ $polyclinic->id }}">{{ $polyclinic->name }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <input type="hidden" name="status" value="{{ $data['status'] }}" />
+                        <input type="hidden" name="patient_id" value="{{ $data['patient_id'] }}" />
+                        <input type="hidden" name="queue_date" id="todayDate" />
+                        <div class="card-footer">
+                            <button type="submit" class="btn btn-primary btn-lg btn-block w-100">Submit</button>
+                        </div>
+                    </form>
                 </div>
             </div>
         </div>
     </div>
 </div>
 @endsection
+
+@push('scripts')
+<script type="text/javascript">
+    function getDate()
+    {
+        var today = new Date();
+        var dd = today.getDate();
+        var mm = today.getMonth()+1; //January is 0!
+        var yyyy = today.getFullYear();
+        if(dd<10){dd='0'+dd} if(mm<10){mm='0'+mm}
+        today = yyyy+"-"+mm+"-"+dd;
+    
+        document.getElementById("todayDate").value = today;
+    }
+
+    getDate();
+</script>
+@endpush

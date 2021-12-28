@@ -83,7 +83,8 @@
                     <tr class="bg bg-">
                         <td style="text-align:center;">{{ $loop->iteration }}</td>
                         <td>{{ $queue->queue_position }}</td>
-                        <td>{{ substr($queue->polyclinic->code, 0, 2). $queue->queue_position }}</td>
+                        <td>{{ substr($queue->polyclinic->code, 0, 2). expandingNumberSize($queue->queue_position) }}
+                        </td>
                         <td>{{ $queue->patient->name }}</td>
                         <td>{{ $queue->polyclinic->name }}</td>
                         <td>{{ $queue->doctorschedule->doctor->name }}</td>

@@ -33,6 +33,7 @@
                             @endforeach
                         </select>
                     </div>
+
                     <div class="form-group">
                         <label for="doctor_schedule_id">Jadwal Dokter</label>
                         <select name="doctor_schedule_id"
@@ -93,7 +94,7 @@
         });
 
         $('#doctor_schedule_id').on('change', function() {
-            $('#date_schedule_id')
+            $('#queue_date')
             .find('option')
             .remove()
             .end()
@@ -104,7 +105,7 @@
             let doctor_schedule = document.getElementById('doctor_schedule_id');
             const value = (doctor_schedule.options[doctor_schedule.selectedIndex].text).split(" ");
 
-            const days = ["Senin", "Selasa", "Rabu", "Kamis", "Jum'at", "Sabtu", "Minggu"];
+            const days = ["Minggu", "Senin", "Selasa", "Rabu", "Kamis", "Jum'at", "Sabtu"];
             let day_period = [value[3], value[5]];
             let day = [];
             day_period[0] = days.indexOf(day_period[0]);
@@ -122,7 +123,8 @@
 
                 for (let item of data.data) {
                     const time = new Date(item);
-                    if(day.includes(time.getDay()-1)) {
+                    // getDay() dimulai dari Sunday(0) hingga Saturday(6)
+                    if(day.includes(time.getDay())) {
                         let o = new Option(item, item);
                         $('#queue_date').append(o);
                     }

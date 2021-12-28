@@ -21,12 +21,24 @@
                 <h5>Status Antrian Rumah Sakit</h5>
             </div>
             <div class="card-body">
+                <a href="{{ route('queue.register') }}" class="btn btn-primary">Daftar Antrian Baru</a>
 
-                <p class="card-text">
-                    Anda belum mendaftar kedalam antrian!
+                <p class="card-text mt-3">
+                    @if($queue_user->count())
+                    <strong>Anda sedang berada di antrian!</strong>
+                <h3>{{ substr($queue_user->get()->first()->polyclinic->code,
+                    0,2).expandingNumberSize($queue_user->get()->first()->queue_position) }}</h3>
+
+                <a href="{{ route('patient.print', ['queue' => $queue_user->get()->first()->id]) }}"
+                    class="btn btn-success btn-md">
+                    <i class="fas fa-print mr-2"></i>
+                    Cetak
+                </a>
+                @else
+                Anda belum mendaftar kedalam antrian!
+                @endif
                 </p>
 
-                <a href="{{ route('queue.register') }}" class="btn btn-primary">Daftar Antrian Baru</a>
             </div>
         </div>
     </div>
@@ -38,27 +50,25 @@
                 <h3>Daftar Antrian Terbaru</h3>
             </div>
             <div class="card-body">
-                <table id="data_user" class="table table-bordered table-striped">
+                <table id="data_user" class="table table-bordered table-striped table-responsive-sm">
                     <thead>
                         <tr>
                             <th width="5" style="text-align:center;">No</th>
                             <th>No Antrian</th>
                             <th>No RM</th>
+                            <th>Status</th>
                             <th>Poli</th>
                             <th>Dokter</th>
                             <th>Waktu Masuk</th>
-                            <th>Status</th>
                         </tr>
                     </thead>
                     <tbody>
                         @foreach($queues as $queue)
                         <tr>
                             <td>{{ $loop->iteration }}</td>
-                            <td>{{ $queue->queue_position }}</td>
-                            <td>{{ substr($queue->polyclinic->code, 0, 2) . $queue->queue_position }}</td>
-                            <td>{{ $queue->polyclinic->name }}</td>
-                            <td>{{ $queue->doctorschedule->doctor->name }}</td>
-                            <td>{{ $queue->queue_date }}</td>
+                            <td>{{ expandingNumberSize($queue->queue_position) }}</td>
+                            <td>{{ substr($queue->polyclinic->code, 0, 2) . expandingNumberSize($queue->queue_position)
+                                }}</td>
                             <td>
                                 @if($queue->status == 1)
                                 <span class="badge badge-warning">waiting</span>
@@ -68,6 +78,9 @@
                                 <span class="badge badge-danger">skipped</span>
                                 @endif
                             </td>
+                            <td>{{ $queue->polyclinic->name }}</td>
+                            <td>{{ $queue->doctorschedule->doctor->name }}</td>
+                            <td>{{ $queue->queue_date }}</td>
                         </tr>
                         @endforeach
                     </tbody>
@@ -103,10 +116,11 @@
                                 - ".
                                 $doctorschedule->schedule->time_start . " - ".
                                 $doctorschedule->schedule->time_end }}</td>
-                            <td>@if($doctorschedule->quota == 0)
+                            <td>@if($doctorschedule->checkQuota($doctorschedule->id) == 0)
                                 <span class="badge badge-danger">PENUH</span>
                                 @else
-                                <span class="badge badge-success">{{ $doctorschedule->quota }}</span>
+                                <span class="badge badge-success">{{
+                                    $doctorschedule->checkQuota($doctorschedule->id) }}</span>
                                 @endif
                             </td>
                         </tr>

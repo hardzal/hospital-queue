@@ -45,4 +45,12 @@ class DoctorSchedule extends Model
     {
         return $this->hasMany(MQueue::class);
     }
+
+    public function checkQuota($id)
+    {
+        $queue = DB::table('queues')->where('doctor_schedule_id', $id)->count();
+        $rest = ($this->where('id', $id)->get()->first()->quota) - ($queue);
+
+        return $rest;
+    }
 }

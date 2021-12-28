@@ -35,11 +35,12 @@ Route::post('/logout', [PatientLoginController::class, 'postLogout'])->name('pat
 Route::get('/', [PatientLoginController::class, 'index'])->name('home');
 Route::get('/queues', [QueueController::class, 'index'])->name('queues');
 Route::get('/schedules', [DoctorController::class, 'index'])->name('doctor.schedule');
+Route::post('/queue/new', [QueueController::class, 'newQueue'])->name('queue.new');
+Route::get('/queue/{queue}', [QueueController::class, 'show'])->name('queue.show');
+Route::get('/print/{queue}', [HomeController::class, 'print'])->name('patient.print');
 
 Route::group(['middleware' => 'auth:patient'], function () {
     Route::get('/queue/register', [QueueController::class, 'register'])->name('queue.register');
-
-    Route::get('/queue/{queue}', [QueueController::class, 'show'])->name('queue.show');
     Route::post('/queue', [QueueController::class, 'store'])->name('queue.store');
     Route::get('/getSchedules/{poly_id}', [QueueController::class, 'getSchedules'])->name('queue.schedules');
     Route::get('/getDate/{time}', [QueueController::class, 'getDate'])->name('queues.time');
@@ -55,8 +56,6 @@ Route::group(['middleware' => 'auth:patient'], function () {
 // 4. jika antrian berganti maka layar akan memperbaharui data antrian
 
 // routes mengecek antrian
-// daftar rekam medis (dashboard user)
-
 // login non pasien
 Route::prefix('mimin')->group(function () {
     Auth::routes(['register' => false]);
@@ -80,4 +79,4 @@ Route::group(['prefix' => 'inside', 'middleware' => 'auth'], function () {
     Route::post('/queues/{queue}', [QueueController::class, 'update'])->name('queues.update');
     Route::delete('/queues/{queue}', [QueueController::class, 'delete'])->name('queues.destroy');
 });
-Route::get('print', [HomeController::class, 'test_print']);
+// Route::get('print', [HomeController::class, 'test_print']);

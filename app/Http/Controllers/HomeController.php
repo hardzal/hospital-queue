@@ -19,7 +19,7 @@ class HomeController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('auth:patient');
+        // $this->middleware('auth:patient');
     }
 
     /**
@@ -30,9 +30,15 @@ class HomeController extends Controller
     public function index()
     {
         $title = "Dashboard";
-        $queues = MQueue::all();
+        $queues = MQueue::orderBy('status', 'ASC')->orderBy('queue_date', 'ASC')->with('polyclinic', 'doctorschedule', 'patient')->get();
+
         $doctorschedules = DoctorSchedule::all();
-        return view('home.index', compact('title', 'queues', 'doctorschedules'));
+        $queue_user = [];
+        if (auth()->check()) {
+            $queue_user = MQueue::where('patient_id', auth()->user()->id)->where('status', 1);
+        }
+
+        return view('home.index', compact('title', 'queues', 'doctorschedules', 'queue_user'));
     }
 
     public function profile()
@@ -60,7 +66,27 @@ class HomeController extends Controller
         $printer->text("Hello world\n");
         $printer->cut();
 
-        $printer->pulse();
+        /* Always close the printer! On some PrintConnectors, no actual
+         * data is sent until the printer is closed. */
+        $printer->close();
+    }
+
+
+    public function print(MQueue $queue)
+    {
+        $connector = new WindowsPrintConnector("POS-80C");
+        $printer = new Printer($connector);
+
+        /* Initialize */
+        $printer->initialize();
+        $text = substr($queue->polyclinic->name, 0, 2) . expandingNumberSize($queue->queue_position);
+        $poly = $queue->polyclinic->name;
+        /* Text */
+        $printer->text("$text\n");
+        $printer->text("\n");
+        $printer->text("$poly");
+        $printer->cut();
+
         /* Always close the printer! On some PrintConnectors, no actual
          * data is sent until the printer is closed. */
         $printer->close();

@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\DoctorSchedule;
+use App\Models\Polyclinic;
 use Illuminate\Http\Request;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Support\Facades\Auth;
@@ -14,13 +16,16 @@ class PatientLoginController extends Controller
 
     public function __construct()
     {
-        $this->middleware('guest:patient')->except('postLogout');
+        $this->middleware('guest:patient')->except('postLogout')->except('index');
     }
 
     public function index()
     {
         $title = "Login Pasien";
-        return view('home', compact('title'));
+        $polyclinics = Polyclinic::all();
+        $data['status'] = 1;
+        $data['patient_id'] = 6;
+        return view('home', compact('title', 'polyclinics', 'data'));
     }
 
     public function showLoginForm()

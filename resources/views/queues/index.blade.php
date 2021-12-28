@@ -45,7 +45,8 @@
                         @foreach($queues as $queue)
                         <tr>
                             <td>{{ $loop->iteration }}</td>
-                            <td>{{ substr($queue->polyclinic->code, 0, 2) . $queue->queue_position }}</td>
+                            <td>{{ substr($queue->polyclinic->code, 0, 2) . expandingNumberSize($queue->queue_position)
+                                }}</td>
                             <td>{{ $queue->polyclinic->name }}</td>
                             <td>{{ $queue->doctorschedule->doctor->name }}</td>
                             <td>{{ $queue->queue_date }}</td>

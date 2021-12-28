@@ -6,7 +6,10 @@ use App\Http\Requests\StoreQueueRequest;
 use App\Models\DoctorSchedule;
 use App\Models\MQueue;
 use App\Models\Polyclinic;
+use App\Models\Schedule;
 use Illuminate\Http\Request;
+use Mike42\Escpos\PrintConnectors\WindowsPrintConnector;
+use Mike42\Escpos\Printer;
 use stdClass;
 
 class QueueController extends Controller
@@ -20,6 +23,7 @@ class QueueController extends Controller
     {
         $title = "Daftar Antrian Saat ini";
         $queues = MQueue::all();
+
         return view('queues.index', compact('title', 'queues'));
     }
 
@@ -41,12 +45,16 @@ class QueueController extends Controller
             ->where('queue_date', $validated['queue_date'])
             ->orderBy('queue_date', 'DESC');
 
-
         if ($last->count() > 0) {
             $doctor = DoctorSchedule::find($validated['doctor_schedule_id']);
             $jumlah = $last->count();
-            if ($jumlah + 1 > $doctor->quota) {
+
+            if ($jumlah > $doctor->quota) {
                 return redirect()->route('queues')->with('error', 'Antrian sudah penuh!');
+            }
+
+            if ($last->where('patient_id', $validated['patient_id'])->count()) {
+                return redirect()->route('queues')->with('error', 'Anda sudah mengantri!');
             }
 
             $queue_position = $last->get()->first()->queue_position + 1;
@@ -102,7 +110,6 @@ class QueueController extends Controller
     public function show(MQueue $queue)
     {
         $title = "Detail Antrian";
-
         return view('queues.show', compact('title', 'queue'));
     }
 
@@ -141,10 +148,10 @@ class QueueController extends Controller
         return view('queues.lists', compact('title', 'queues', 'polyclinics'));
     }
 
-    public function poly(Polyclinic $poly)
+    public function poly(Polyclinic $polyclinic)
     {
 
-        return view('queues.polys');
+        return view('queues.polys', compact('polyclinic'));
     }
 
     public function update(Request $request, MQueue $queue)
@@ -163,5 +170,114 @@ class QueueController extends Controller
 
     public function delete(MQueue $queue)
     {
+        $queue->delete();
+        return redirect()->route('queues.list')->with('success', 'Berhasil menghapus data antrian');
+    }
+
+    public function print(MQueue $queue)
+    {
+        $connector = new WindowsPrintConnector("POS-80C");
+        $printer = new Printer($connector);
+
+        /* Initialize */
+        $printer->initialize();
+        $text = substr($queue->polyclinic->name, 0, 2) . expandingNumberSize($queue->queue_position);
+        $poly = $queue->polyclinic->name;
+        /* Text */
+        $printer->text("$text\n");
+        $printer->text("\n");
+        $printer->text("$poly");
+        $printer->cut();
+
+        /* Always close the printer! On some PrintConnectors, no actual
+         * data is sent until the printer is closed. */
+        $printer->close();
+    }
+
+    public function newQueue(Request $request)
+    {
+        $request->validate([
+            'polyclinic_id' => 'required',
+            'status' => 'required',
+            'queue_date' => 'required',
+            'patient_id' => 'required',
+        ]);
+
+        $data['doctor_schedule_id'] = 0;
+        $days = ['Minggu', 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jum\'at', 'Sabtu'];
+        $today = date('w');
+
+        $polyclinic_id = $request->polyclinic_id;
+        $schedules = Schedule::all();
+        $schedule_day = [];
+        // retrieve all schedule to find the day beetween of the schedule that same of this day
+        foreach ($schedules as $index => $schedule) {
+            $temp = new stdClass;
+            $date_day = [];
+            $temp_start = array_keys($days, $schedule->day_start);
+            $temp_end = array_keys($days, $schedule->day_end);
+            for ($i = $temp_start[0]; $i <= $temp_end[0]; $i++) {
+                $date_day[] = $i;
+            }
+
+            if (in_array($today, $date_day)) {
+                $temp->schedule_id = $schedule->id;
+                $temp->date_day = $date_day;
+                $schedule_day[] = $temp;
+            }
+        }
+        $doctor_schedule = [];
+        // find the doctor_schedule_id based on polyclinic_id and the schedule_id
+        foreach ($schedule_day as $index => $item) {
+            $doctorschedules = DoctorSchedule::where('polyclinic_id', $polyclinic_id)->where('schedule_id', $item->schedule_id)->get();
+            if (count($doctorschedules)) {
+                $doctor_schedule[] = $doctorschedules->first()->id;
+            }
+        }
+        $today = date('Y-m-d');
+        $last = MQueue::where('polyclinic_id', $polyclinic_id)
+            ->where('queue_date', $today)
+            ->orderBy('queue_date', 'DESC');
+
+        $queue_position = 1;
+        $doctor_schedule_id = $doctor_schedule[0];
+
+        if ($last->count() > 0) {
+            foreach ($doctor_schedule as $item) {
+                $doctor = DoctorSchedule::find($item);
+                $jumlah = $last->count();
+
+                if ($jumlah > $doctor->quota) {
+                    return redirect()->route('queues')->with('error', 'Antrian sudah penuh!');
+                }
+                $doctor_schedule_id = $item;
+            }
+
+            if ($last->where('patient_id', $request->patient_id)->count()) {
+                return redirect()->route('queues')->with('error', 'Anda sudah mengantri!');
+            }
+
+            $queue_position = $last->get()->first()->queue_position + 1;
+        }
+
+        $current_position = 0;
+
+        if ($queue_position == 1) {
+            $current_position = 1;
+        }
+
+        $data = [
+            'patient_id' => $request->patient_id,
+            'polyclinic_id' => $polyclinic_id,
+            'doctor_schedule_id' => $doctor_schedule_id,
+            'queue_date' => $today,
+            'queue_position' => $queue_position,
+            'current_position' => $current_position,
+            'status' => $request->status
+        ];
+
+        $queue = MQueue::create($data);
+
+        return redirect()->route('queue.show', ['queue' => $queue->id])->with('success', 'Berhasil mendaftar ke dalam antrian');
     }
 }
