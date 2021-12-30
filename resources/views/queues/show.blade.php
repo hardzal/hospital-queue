@@ -32,7 +32,7 @@
                 <h3>Posisi Antrian</h3>
             </div>
             <div class="card-body">
-                <h1>{{ substr($queue->polyclinic->code, 0, 2) }}{{ $queue->queue_position }}</h1>
+                <h1>{{ $queue->polyclinic->code }}{{ expandingNumberSize($queue->queue_position) }}</h1>
 
                 <a href="{{ route('patient.print', ['queue' => $queue->id]) }}" class="btn btn-success btn-md">
                     <i class="fas fa-print mr-2"></i>

@@ -19,10 +19,21 @@ class QueueController extends Controller
         // $this->middleware('auth:patient');
     }
 
-    public function index()
+    public function index(Request $request)
     {
         $title = "Daftar Antrian Saat ini";
-        $queues = MQueue::all();
+
+        $queues = MQueue::where('queue_date', date('Y-m-d'))->orderBy('queue_position', 'ASC')->orderBy('current_position', 'DESC')->limit(3)->get();
+
+        if ($request->poly) {
+            $queues = MQueue::where('polyclinic_id', $request->polyclinic)->where('queue_date', date('Y-m-d'))
+                ->orderBy('queue_position', 'ASC')->orderBy('current_position', 'DESC')->limit(3)->get();
+        }
+
+        if ($request->date) {
+            $queues = MQueue::where('polyclinic_id', $request->polyclinic)->where('queue_date', $request->date)
+                ->orderBy('queue_position', 'ASC')->orderBy('current_position', 'DESC')->limit(3)->get();
+        }
 
         return view('queues.index', compact('title', 'queues'));
     }
@@ -279,5 +290,15 @@ class QueueController extends Controller
         $queue = MQueue::create($data);
 
         return redirect()->route('queue.show', ['queue' => $queue->id])->with('success', 'Berhasil mendaftar ke dalam antrian');
+    }
+
+    public function search(Request $request)
+    {
+        $request->validate([
+            'code_rm' => 'required',
+            'queue_date' => 'required'
+        ]);
+
+        
     }
 }

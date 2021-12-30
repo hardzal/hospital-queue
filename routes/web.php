@@ -33,9 +33,10 @@ Route::post('/register', [PatientLoginController::class, 'register'])->name('pat
 Route::post('/logout', [PatientLoginController::class, 'postLogout'])->name('patient.logout');
 
 Route::get('/', [PatientLoginController::class, 'index'])->name('home');
-Route::get('/queues', [QueueController::class, 'index'])->name('queues');
+Route::get('/queues/{poly?}/{date?}', [QueueController::class, 'index'])->name('queues');
 Route::get('/schedules', [DoctorController::class, 'index'])->name('doctor.schedule');
 Route::post('/queue/new', [QueueController::class, 'newQueue'])->name('queue.new');
+Route::post('/queue/search', [QueueController::class, 'search'])->name('queue.search');
 Route::get('/queue/{queue}', [QueueController::class, 'show'])->name('queue.show');
 Route::get('/print/{queue}', [HomeController::class, 'print'])->name('patient.print');
 

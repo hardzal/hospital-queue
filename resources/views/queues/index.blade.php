@@ -18,6 +18,7 @@
     <div class="col-md-12">
         <div class="card">
             <div class="card-header">
+                <h3>{{ date('d F Y', strtotime($queues[0]->queue_date))}}</h3>
                 @if(session()->has('success'))
                 <div class="alert alert-success alert-dismissible fade show" role="alert">
                     {{ session("success") }}
@@ -32,31 +33,33 @@
             </div>
 
             <div class="card-body">
-                <table class="table table-bordered">
-                    <thead>
-                        <th>No</th>
-                        <th>Kode</th>
-                        <th>Poli</th>
-                        <th>Dokter</th>
-                        <th>Waktu Ngantri</th>
-                        <th>Waktu Masuk</th>
-                    </thead>
-                    <tbody>
-                        @foreach($queues as $queue)
-                        <tr>
-                            <td>{{ $loop->iteration }}</td>
-                            <td>{{ substr($queue->polyclinic->code, 0, 2) . expandingNumberSize($queue->queue_position)
-                                }}</td>
-                            <td>{{ $queue->polyclinic->name }}</td>
-                            <td>{{ $queue->doctorschedule->doctor->name }}</td>
-                            <td>{{ $queue->queue_date }}</td>
-                            <td>-</td>
-                        </tr>
-                        @endforeach
-                    </tbody>
-                    <tfoot>
-                    </tfoot>
-                </table>
+                <div class="row">
+                    @if(count($queues))
+                    @foreach($queues as $queue)
+                    <div class="col-lg-4">
+                        @if($queue->current_position == 1)
+                        <div class="small-box bg-primary p-5 text-center">
+                            <div class="inner">
+                                <h2>{{ $queue->polyclinic->code }}{{
+                                    expandingNumberSize($queue->queue_position)
+                                    }}</h2>
+                            </div>
+                        </div>
+                        @else
+                        <div class="small-box bg-secondary p-5 text-center">
+                            <div class="inner">
+                                <h2>{{ $queue->polyclinic->code }}{{
+                                    expandingNumberSize($queue->queue_position)
+                                    }}</h2>
+                            </div>
+                        </div>
+                        @endif
+                    </div>
+                    @endforeach
+                    @else
+                    <p>Belum ada antrian</p>
+                    @endif
+                </div>
             </div>
         </div>
     </div>

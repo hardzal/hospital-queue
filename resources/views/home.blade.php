@@ -30,9 +30,24 @@
                         <input type="hidden" name="status" value="{{ $data['status'] }}" />
                         <input type="hidden" name="patient_id" value="{{ $data['patient_id'] }}" />
                         <input type="hidden" name="queue_date" id="todayDate" />
-                        <div class="card-footer">
-                            <button type="submit" class="btn btn-primary btn-lg btn-block w-100">Submit</button>
-                        </div>
+                        <button type="submit" class="btn btn-primary btn-lg btn-block w-100 mt-3">Submit</button>
+                    </form>
+                </div>
+                <div class="card-footer">
+                </div>
+            </div>
+
+            <div class="card mt-5">
+                <div class="card-header">
+                    <h3>Pencarian Antrian</h3>
+                </div>
+
+                <div class="card-body">
+                    <form method="POST" action="{{ route('queue.search') }}">
+                        @csrf
+                        <input type="text" id="search" class="form-control" name="code_rm" />
+                        <input type="hidden" value="{{ date('Y-m-d') }}" name="queue_date" />
+                        <button type="submit" class="btn btn-primary btn-lg btn-block w-100 mt-3">Search</button>
                     </form>
                 </div>
             </div>
@@ -51,7 +66,7 @@
         var yyyy = today.getFullYear();
         if(dd<10){dd='0'+dd} if(mm<10){mm='0'+mm}
         today = yyyy+"-"+mm+"-"+dd;
-    
+
         document.getElementById("todayDate").value = today;
     }
 

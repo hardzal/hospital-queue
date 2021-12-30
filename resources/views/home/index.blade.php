@@ -67,7 +67,7 @@
                         <tr>
                             <td>{{ $loop->iteration }}</td>
                             <td>{{ expandingNumberSize($queue->queue_position) }}</td>
-                            <td>{{ substr($queue->polyclinic->code, 0, 2) . expandingNumberSize($queue->queue_position)
+                            <td>{{ $queue->polyclinic->code . expandingNumberSize($queue->queue_position)
                                 }}</td>
                             <td>
                                 @if($queue->status == 1)
