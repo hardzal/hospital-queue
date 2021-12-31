@@ -299,6 +299,28 @@ class QueueController extends Controller
             'queue_date' => 'required'
         ]);
 
-        
+        $title = "Hasil Pencarian Antrian";
+        $poly_code = substr($request->code_rm, 0, 3);
+        $last_part = str_split(substr($request->code_rm, 3, 4));
+        $last_position = 0;
+        for ($i = 0; $i < sizeof($last_part); $i++) {
+            if ($last_part[$i] > 0) {
+                $last_position = $i;
+                break;
+            }
+        }
+        $queue_position = "";
+        for ($i = $last_position; $i < sizeof($last_part); $i++) {
+            $queue_position .= $last_part[$i];
+        }
+
+        $queue_date = $request->queue_date;
+        $polyclinic = Polyclinic::where('code', $poly_code)->get()->first();
+        $queue = [];
+
+        if ($polyclinic->id != null) {
+            $queue = MQueue::where('polyclinic_id', $polyclinic->id)->where('queue_date', $queue_date)->where('queue_position', $queue_position)->get()->first();
+        }
+        return view('queues.show', compact('title', 'queue'));
     }
 }

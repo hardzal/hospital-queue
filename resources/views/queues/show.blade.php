@@ -32,12 +32,18 @@
                 <h3>Posisi Antrian</h3>
             </div>
             <div class="card-body">
+                @if($queue)
                 <h1>{{ $queue->polyclinic->code }}{{ expandingNumberSize($queue->queue_position) }}</h1>
 
                 <a href="{{ route('patient.print', ['queue' => $queue->id]) }}" class="btn btn-success btn-md">
                     <i class="fas fa-print mr-2"></i>
                     Cetak
                 </a>
+                @else
+                <div class="alert alert-danger">
+                    <p>Data tidak ditemukan!</p>
+                </div>
+                @endif
             </div>
         </div>
     </div>
