@@ -18,7 +18,12 @@
     <div class="col-md-12">
         <div class="card">
             <div class="card-header">
+                @if(count($queues))
                 <h3>{{ date('d F Y', strtotime($queues[0]->queue_date))}}</h3>
+                @else
+                <h3>Tidak ditemukan Antrian</h3>
+                @endif
+
                 @if(session()->has('success'))
                 <div class="alert alert-success alert-dismissible fade show" role="alert">
                     {{ session("success") }}
@@ -57,7 +62,7 @@
                     </div>
                     @endforeach
                     @else
-                    <p>Belum ada antrian</p>
+                    <p class="alert alert-danger">Belum ada antrian</p>
                     @endif
                 </div>
             </div>

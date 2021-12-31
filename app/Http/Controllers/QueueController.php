@@ -26,7 +26,7 @@ class QueueController extends Controller
         $queues = MQueue::where('queue_date', date('Y-m-d'))->orderBy('queue_position', 'ASC')->orderBy('current_position', 'DESC')->limit(3)->get();
 
         if ($request->poly) {
-            $queues = MQueue::where('polyclinic_id', $request->polyclinic)->where('queue_date', date('Y-m-d'))
+            $queues = MQueue::where('polyclinic_id', $request->poly)->where('queue_date', date('Y-m-d'))
                 ->orderBy('queue_position', 'ASC')->orderBy('current_position', 'DESC')->limit(3)->get();
         }
 
