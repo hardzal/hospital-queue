@@ -71,20 +71,25 @@ class HomeController extends Controller
         $printer->close();
     }
 
-
     public function print(MQueue $queue)
+    {
+        $this->createPrint($queue);
+    }
+
+    protected function createPrint(MQueue $queue)
     {
         $connector = new WindowsPrintConnector("POS-80C");
         $printer = new Printer($connector);
 
         /* Initialize */
         $printer->initialize();
-        $text = substr($queue->polyclinic->name, 0, 2) . expandingNumberSize($queue->queue_position);
+        $text = $queue->polyclinic->code . expandingNumberSize($queue->queue_position);
         $poly = $queue->polyclinic->name;
         /* Text */
         $printer->text("$text\n");
         $printer->text("\n");
-        $printer->text("$poly");
+        $printer->text("$poly\n");
+        $printer->text("$queue->queue_date\n\n");
         $printer->cut();
 
         /* Always close the printer! On some PrintConnectors, no actual

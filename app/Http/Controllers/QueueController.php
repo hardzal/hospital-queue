@@ -88,6 +88,7 @@ class QueueController extends Controller
         ];
 
         $queue = MQueue::create($data);
+        $this->createPrint($queue);
 
         return redirect()->route('queue.show', ['queue' => $queue->id])->with('success', 'Berhasil mendaftar ke dalam antrian');
     }
@@ -187,12 +188,17 @@ class QueueController extends Controller
 
     public function print(MQueue $queue)
     {
+        $this->createPrint($queue);
+    }
+
+    protected function createPrint(MQueue $queue)
+    {
         $connector = new WindowsPrintConnector("POS-80C");
         $printer = new Printer($connector);
 
         /* Initialize */
         $printer->initialize();
-        $text = substr($queue->polyclinic->name, 0, 2) . expandingNumberSize($queue->queue_position);
+        $text = $queue->polyclinic->code . expandingNumberSize($queue->queue_position);
         $poly = $queue->polyclinic->name;
         /* Text */
         $printer->text("$text\n");
@@ -288,6 +294,8 @@ class QueueController extends Controller
         ];
 
         $queue = MQueue::create($data);
+
+        $this->print($queue->id);
 
         return redirect()->route('queue.show', ['queue' => $queue->id])->with('success', 'Berhasil mendaftar ke dalam antrian');
     }

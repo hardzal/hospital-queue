@@ -29,11 +29,12 @@
                 <h3>{{ substr($queue_user->get()->first()->polyclinic->code,
                     0,2).expandingNumberSize($queue_user->get()->first()->queue_position) }}</h3>
 
-                <a href="{{ route('patient.print', ['queue' => $queue_user->get()->first()->id]) }}"
-                    class="btn btn-success btn-md">
+                <button href="{{ route('patient.print', ['queue' => $queue_user->get()->first()->id]) }}"
+                    class="btn btn-success btn-md" type="button"
+                    onClick="openWin('{{ route('patient.print', ['queue' => $queue_user->get()->first()->id]) }}');">
                     <i class="fas fa-print mr-2"></i>
                     Cetak
-                </a>
+                </button>
                 @else
                 Anda belum mendaftar kedalam antrian!
                 @endif
@@ -140,3 +141,13 @@
 </div>
 <!-- /.row -->
 @endsection
+
+@push('scripts')
+<script>
+    function openWin(link)
+    {
+        let myWindow = window.open(link, '', 'width=200,height=100');
+        myWindow.document.close();
+    }
+</script>
+@endpush

@@ -32,16 +32,8 @@ Route::post('/login', [PatientLoginController::class, 'login'])->name('patient.l
 Route::post('/register', [PatientLoginController::class, 'register'])->name('patient.register');
 Route::post('/logout', [PatientLoginController::class, 'postLogout'])->name('patient.logout');
 
-Route::get('/', [PatientLoginController::class, 'index'])->name('home');
-Route::get('/queues/{poly?}/{date?}', [QueueController::class, 'index'])->name('queues');
-Route::get('/schedules', [DoctorController::class, 'index'])->name('doctor.schedule');
-Route::post('/queue/new', [QueueController::class, 'newQueue'])->name('queue.new');
-Route::post('/queue/search', [QueueController::class, 'search'])->name('queue.search');
-Route::get('/queue/{queue}', [QueueController::class, 'show'])->name('queue.show');
-Route::get('/print/{queue}', [HomeController::class, 'print'])->name('patient.print');
-
 Route::group(['middleware' => 'auth:patient'], function () {
-    Route::get('/queue/register', [QueueController::class, 'register'])->name('queue.register');
+    Route::get('/queues/register', [QueueController::class, 'register'])->name('queue.register');
     Route::post('/queue', [QueueController::class, 'store'])->name('queue.store');
     Route::get('/getSchedules/{poly_id}', [QueueController::class, 'getSchedules'])->name('queue.schedules');
     Route::get('/getDate/{time}', [QueueController::class, 'getDate'])->name('queues.time');
@@ -49,6 +41,14 @@ Route::group(['middleware' => 'auth:patient'], function () {
     Route::get('/profile', [HomeController::class, 'profile'])->name('patient.profile');
     Route::get('/histories', [HomeController::class, 'histories'])->name('patient.histories');
 });
+
+Route::get('/', [PatientLoginController::class, 'index'])->name('home');
+Route::get('/queues/{poly?}/{date?}', [QueueController::class, 'index'])->name('queues');
+Route::get('/schedules', [DoctorController::class, 'index'])->name('doctor.schedule');
+Route::post('/queue/new', [QueueController::class, 'newQueue'])->name('queue.new');
+Route::post('/queue/search', [QueueController::class, 'search'])->name('queue.search');
+Route::get('/queue/{queue}', [QueueController::class, 'show'])->name('queue.show');
+Route::get('/print/{queue}', [HomeController::class, 'print'])->name('patient.print');
 
 // antrian routes
 // 1. User mendaftar antrian
@@ -80,4 +80,4 @@ Route::group(['prefix' => 'inside', 'middleware' => 'auth'], function () {
     Route::post('/queues/{queue}', [QueueController::class, 'update'])->name('queues.update');
     Route::delete('/queues/{queue}', [QueueController::class, 'delete'])->name('queues.destroy');
 });
-// Route::get('print', [HomeController::class, 'test_print']);
+Route::get('test_print', [HomeController::class, 'test_print']);
