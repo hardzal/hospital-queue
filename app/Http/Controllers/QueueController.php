@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreQueueRequest;
 use App\Models\DoctorSchedule;
+use App\Models\Medicalrecord;
 use App\Models\MQueue;
 use App\Models\Polyclinic;
 use App\Models\Schedule;
@@ -176,6 +177,19 @@ class QueueController extends Controller
         $queue->current_position = $request->current_position;
         $queue->status = $request->status;
         $queue->save();
+
+        // status == 2 -> 'done'
+        if ($request->status == 2) {
+            $history_medics = [
+                'patient_id' => $queue->patient_id,
+                'doctor_schedule_id' => $queue->schedule_id,
+                'type' => $queue->type,
+                'description' => "",
+                'queue_position' => $queue->queue_position,
+            ];
+
+            Medicalrecord::create($history_medics);
+        }
 
         return redirect()->route('queues.list', ['polyclinic_id' => $request->poly_id, 'queue_date' => $request->queue_date])->with('success', 'Lanjut ke antrian selanjutnya');
     }

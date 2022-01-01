@@ -55,7 +55,7 @@
                     </div>
                     <div class="col-md-4">
                         <input type="date" name="queue_date" class="form-control" @if(isset($_GET))
-                            value="{{ $_GET['queue_date'] }}" @endif />
+                            value="{{ @$_GET['queue_date'] }}" @endif />
                     </div>
                     <div class="col-md-2">
                         <button class="btn btn-primary" type="submit">
@@ -82,8 +82,8 @@
                     @foreach($queues as $queue)
                     <tr class="bg bg-">
                         <td style="text-align:center;">{{ $loop->iteration }}</td>
-                        <td>{{ $queue->queue_position }}</td>
-                        <td>{{ substr($queue->polyclinic->code, 0, 2). expandingNumberSize($queue->queue_position) }}
+                        <td>{{ expandingNumberSize($queue->queue_position) }}</td>
+                        <td>{{ $queue->polyclinic->code. expandingNumberSize($queue->queue_position) }}
                         </td>
                         <td>{{ $queue->patient->name }}</td>
                         <td>{{ $queue->polyclinic->name }}</td>
