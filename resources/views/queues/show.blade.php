@@ -33,12 +33,18 @@
             </div>
             <div class="card-body">
                 @if($queue)
+                @if($queue == 404)
+                <div class="alert alert-warning">
+                    <p>Jadwal belum tersedia!</p>
+                </div>
+                @else
                 <h1>{{ $queue->polyclinic->code }}{{ expandingNumberSize($queue->queue_position) }}</h1>
 
                 <a href="{{ route('patient.print', ['queue' => $queue->id]) }}" class="btn btn-success btn-md">
                     <i class="fas fa-print mr-2"></i>
                     Cetak
                 </a>
+                @endif
                 @else
                 <div class="alert alert-danger">
                     <p>Data tidak ditemukan!</p>

@@ -257,7 +257,13 @@ class QueueController extends Controller
             ->orderBy('queue_date', 'DESC');
 
         $queue_position = 1;
-        $doctor_schedule_id = $doctor_schedule[0];
+        if (!empty($doctor_schedule)) {
+            $doctor_schedule_id = $doctor_schedule[0];
+        } else {
+            $queue = 404;
+            $title = "Antrian Rumah Sakit";
+            return view('queues.show', compact('queue', 'title'));
+        }
 
         if ($last->count() > 0) {
             foreach ($doctor_schedule as $item) {
