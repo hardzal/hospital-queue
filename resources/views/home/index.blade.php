@@ -26,7 +26,7 @@
                 @if($queue_user->count())
                 <h3>Daftar Antrian Anda Saat ini</h3>
 
-                <table class="table table-bordered table-striped table-responsive-sm">
+                <table id="data_user_queue" class="table table-bordered table-striped table-responsive-sm">
                     <thead>
                         <tr>
                             <th>No</th>
@@ -54,7 +54,8 @@
                         </tr>
                         @endforeach
                     </tbody>
-                    </thead>
+                    <tfoot>
+                    </tfoot>
                 </table>
                 {{--
                 <h3>{{ substr($queue_user->get()->polyclinic->code,
@@ -81,7 +82,7 @@
                 <h3>Daftar Antrian Terbaru</h3>
             </div>
             <div class="card-body">
-                <table id="data_user" class="table table-bordered table-striped table-responsive-sm">
+                <table id="data_queue" class="table table-bordered table-striped table-responsive-sm">
                     <thead>
                         <tr>
                             <th width="5" style="text-align:center;">No</th>
@@ -115,6 +116,9 @@
                         </tr>
                         @endforeach
                     </tbody>
+                    <tfoot>
+
+                    </tfoot>
                 </table>
             </div>
         </div>
@@ -127,7 +131,7 @@
                 Daftar Jadwal Dokter
             </div>
             <div class="card-body">
-                <table class="table table-bordered">
+                <table class="table table-bordered" id="data_schedule">
                     <thead>
                         <tr>
                             <th>No</th>
@@ -157,6 +161,9 @@
                         </tr>
                         @endforeach
                     </tbody>
+                    <tfoot>
+
+                    </tfoot>
                 </table>
             </div>
         </div>
@@ -182,3 +189,106 @@
 </script>
 @endpush
 
+@push('scripts')
+<!-- DataTables  & Plugins -->
+<script src="{{ asset('plugins/datatables/jquery.dataTables.min.js') }}"></script>
+<script src="{{ asset('plugins/datatables-bs4/js/dataTables.bootstrap4.min.js') }}"></script>
+<script src="{{ asset('plugins/datatables-responsive/js/dataTables.responsive.min.js') }}"></script>
+<script src="{{ asset('plugins/datatables-responsive/js/responsive.bootstrap4.min.js') }}"></script>
+<script src="{{ asset('plugins/datatables-buttons/js/dataTables.buttons.min.js') }}"></script>
+<script src="{{ asset('plugins/datatables-buttons/js/buttons.bootstrap4.min.js') }}"></script>
+<script src="{{ asset('plugins/jszip/jszip.min.js') }}"></script>
+<script src="{{ asset('plugins/pdfmake/pdfmake.min.js') }}"></script>
+<script src="{{ asset('plugins/pdfmake/vfs_fonts.js') }}"></script>
+<script src="{{ asset('plugins/datatables-buttons/js/buttons.html5.min.js') }}"></script>
+<script src="{{ asset('plugins/datatables-buttons/js/buttons.print.min.js') }}"></script>
+<script src="{{ asset('plugins/datatables-buttons/js/buttons.colVis.min.js') }}"></script>
+@endpush
+
+@push('scripts')
+<script>
+    $("#data_queue").DataTable({
+        "lengthChange": false,
+        "searching": true,
+        "ordering": true,
+        "info": true,
+        "pageLength": 5,
+        "dom": 'Brtip',
+        "responsive": true, "lengthChange": false, "autoWidth": false,
+        // "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"],
+        "buttons": [
+            {
+                "extend": 'copyHtml5',
+                "exportOptions": {
+                    "columns": [ 1, ':visible' ]
+                }
+            },
+            {
+                "extend": 'excelHtml5',
+                "exportOptions": {
+                    "columns": [ 0, 1, 2, 3, 4, 5, 6 ]
+                }
+            },
+            {
+                "extend": 'pdfHtml5',
+                "exportOptions": {
+                    "columns": [ 0, 1, 2, 3, 4, 5, 6 ]
+                }
+            },
+            {
+                "extend": "csv",
+                "exportOptions": {
+                    "columns": [ 0, 1, 2, 3, 4, 5, 6 ]
+                }
+            },
+            {
+                "extend": "print",
+                "exportOptions": {
+                    "columns": [ 0, 1, 2, 3, 4, 5 ]
+                }
+            },
+            'colvis'
+        ]
+    }).buttons().container().appendTo('#data_queue_wrapper .col-md-6:eq(0)');
+
+    $("#data_user_queue").DataTable({
+        "pageLength": 5,
+        "dom": 'Brtip',
+        "responsive": true, "lengthChange": false, "autoWidth": false,
+        // "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"],
+        "buttons": [
+            {
+                "extend": 'copyHtml5',
+                "exportOptions": {
+                    "columns": [ 1, ':visible' ]
+                }
+            },
+            {
+                "extend": 'excelHtml5',
+                "exportOptions": {
+                    "columns": [ 0, 1, 2, 3, 4 ]
+                }
+            },
+            {
+                "extend": 'pdfHtml5',
+                "exportOptions": {
+                    "columns": [ 0, 1, 2, 3, 4 ]
+                }
+            },
+            {
+                "extend": "csv",
+                "exportOptions": {
+                    "columns": [ 0, 1, 2, 3, 4 ]
+                }
+            },
+            {
+                "extend": "print",
+                "exportOptions": {
+                    "columns": [ 0, 1, 2, 3, 4 ]
+                }
+            },
+            'colvis'
+        ]
+    }).buttons().container().appendTo('#data_user_queue_wrapper .col-md-6:eq(0)');
+</script>
+@endpush

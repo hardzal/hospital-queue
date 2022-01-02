@@ -30,6 +30,7 @@
                     </p>
                 </a>
             </li>
+            @if(auth()->user()->role_id == 1)
             <li class="nav-item">
                 <a href="{{ route('patients.index') }}" class="nav-link">
                     <i class="nav-icon fas fa-hospital-user"></i>
@@ -92,6 +93,14 @@
                     </p>
                 </a>
             </li>
+            @else
+            <li class="nav-item">
+                <a href="#" class="nav-link">
+                    <i class="nav-icon fas fa-layer-group"></i>
+                    <p>Antrian</p>
+                </a>
+            </li>
+            @endif
             <li class="nav-item">
                 <a class="nav-link" href="{{ route('logout') }}" onclick="event.preventDefault();
                               document.getElementById('logout-form').submit();">

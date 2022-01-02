@@ -65,11 +65,6 @@ class PatientLoginController extends Controller
         return redirect()->route('patient.register')->with('message', 'Successfully register!');
     }
 
-    public function hello()
-    {
-        dd("hello?");
-    }
-
     public function postLogout()
     {
         auth()->guard('patient')->logout();

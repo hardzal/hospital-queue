@@ -156,11 +156,13 @@ class QueueController extends Controller
             $queues = MQueue::orderBy('status', 'ASC')->where('polyclinic_id', $request->polyclinic_id);
         }
 
-        if (isset($request->polyclinic_id) && isset($request->queue_date)) {
+        if (isset($request->queue_date)) {
             $queues = $queues->where('queue_date', $request->queue_date);
         }
 
-        $queues = $queues->get();
+        if (!isset($request->queue_date)) {
+            $queues = $queues->where('queue_date', date('Y-m-d'))->get();
+        }
 
         return view('queues.lists', compact('title', 'queues', 'polyclinics'));
     }

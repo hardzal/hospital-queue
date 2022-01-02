@@ -43,7 +43,6 @@
                     <div class="col-md-6">
                         <select name="polyclinic_id" class="form-control">
                             <option value="">Pilih Poliklini</option>
-                            <option value="0">Tampilkan semua antrian</option>
                             @foreach($polyclinics as $poly)
                             @if(@$_GET['polyclinic_id'] == $poly->id)
                             <option value="{{ $poly->id }}" selected>{{ $poly->name }}</option>
@@ -55,7 +54,7 @@
                     </div>
                     <div class="col-md-4">
                         <input type="date" name="queue_date" class="form-control" @if(isset($_GET))
-                            value="{{ @$_GET['queue_date'] }}" @endif />
+                            value="{{ isset($_GET['queue_date']) ? $_GET['queue_date'] : date('Y-m-d') }}" @endif />
                     </div>
                     <div class="col-md-2">
                         <button class="btn btn-primary" type="submit">
@@ -80,7 +79,7 @@
                 </thead>
                 <tbody>
                     @foreach($queues as $queue)
-                    <tr class="bg bg-">
+                    <tr class="">
                         <td style="text-align:center;">{{ $loop->iteration }}</td>
                         <td>{{ expandingNumberSize($queue->queue_position) }}</td>
                         <td>{{ $queue->polyclinic->code. expandingNumberSize($queue->queue_position) }}
@@ -180,25 +179,25 @@
             {
                 "extend": 'excelHtml5',
                 "exportOptions": {
-                    "columns": [ 0, 1, 2, 3, 4 ]
+                    "columns": [ 0, 1, 2, 3, 4, 5, 6 ]
                 }
             },
             {
                 "extend": 'pdfHtml5',
                 "exportOptions": {
-                    "columns": [ 0, 1, 2, 3, 4 ]
+                    "columns": [ 0, 1, 2, 3, 4, 5, 6 ]
                 }
             },
             {
                 "extend": "csv",
                 "exportOptions": {
-                    "columns": [ 0, 1, 2, 3, 4 ]
+                    "columns": [ 0, 1, 2, 3, 4, 5, 6 ]
                 }
             },
             {
                 "extend": "print",
                 "exportOptions": {
-                    "columns": [ 0, 1, 2, 3, 4 ]
+                    "columns": [ 0, 1, 2, 3, 4, 5 ]
                 }
             },
             'colvis'
