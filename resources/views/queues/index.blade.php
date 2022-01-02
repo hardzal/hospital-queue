@@ -16,31 +16,60 @@
 @section('content')
 <div class="row">
     <div class="col-md-12">
-        <div class="card">
-            <div class="card-header">
-                @if(count($queues))
-                <h3>{{ date('d F Y', strtotime($queues[0]->queue_date))}}</h3>
-                @else
-                <h3>Tidak ditemukan Antrian</h3>
-                @endif
-
-                @if(session()->has('success'))
-                <div class="alert alert-success alert-dismissible fade show" role="alert">
-                    {{ session("success") }}
+        <form method="GET" action="{{ route('queues') }}">
+            <div class="row mb-2">
+                <div class="col-md-6">
+                    <select name="polyclinic" class="form-control">
+                        <option value="">Pilih Poliklini</option>
+                        <option value="0">Tampilkan semua antrian</option>
+                        @foreach($polyclinics as $poly)
+                        @if(@$_GET['polyclinic'] == $poly->id)
+                        <option value="{{ $poly->id }}" selected>{{ $poly->name }}</option>
+                        @else
+                        <option value="{{ $poly->id }}">{{ $poly->name }}</option>
+                        @endif
+                        @endforeach
+                    </select>
                 </div>
-                @endif
-
-                @if(session()->has('error'))
-                <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                    {{ session("error") }}
+                <div class="col-md-4">
+                    <input type="date" name="date" class="form-control" @if(isset($_GET)) value="{{ @$_GET['date'] }}"
+                        @endif />
                 </div>
-                @endif
+                <div class="col-md-2">
+                    <button class="btn btn-primary" type="submit">
+                        Show
+                    </button>
+                </div>
             </div>
+        </form>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-12">
+        @if(session()->has('success'))
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            {{ session("success") }}
+        </div>
+        @endif
+
+        @if(session()->has('error'))
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            {{ session("error") }}
+        </div>
+        @endif
+    </div>
+    <div class="col-md-12">
+        @if(count($queues))
+        @foreach($queues as $queue)
+        <div class="card">
+            @if(in_array($queue->queue_date, $queue_dates))
+            <div class="card-header">
+                <h3>{{ date('d F Y', strtotime($queue->queue_date))}}</h3>
+            </div>
+            @endif
 
             <div class="card-body">
                 <div class="row">
-                    @if(count($queues))
-                    @foreach($queues as $queue)
                     <div class="col-lg-4">
                         @if($queue->current_position == 1)
                         <div class="small-box bg-primary p-5 text-center">
@@ -60,13 +89,19 @@
                         </div>
                         @endif
                     </div>
-                    @endforeach
-                    @else
-                    <p class="alert alert-danger">Belum ada antrian</p>
-                    @endif
                 </div>
             </div>
         </div>
+        @endforeach
+        @else
+        <div class="card">
+            <div class="card-body">
+                <p class="alert alert-danger">
+                    Belum ada antrian
+                </p>
+            </div>
+        </div>
+        @endif
     </div>
 </div>
 @endsection

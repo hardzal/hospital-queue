@@ -9,6 +9,7 @@ use App\Models\MQueue;
 use App\Models\Polyclinic;
 use App\Models\Schedule;
 use Illuminate\Http\Request;
+use Illuminate\Support\Arr;
 use Mike42\Escpos\PrintConnectors\WindowsPrintConnector;
 use Mike42\Escpos\Printer;
 use stdClass;
@@ -23,20 +24,23 @@ class QueueController extends Controller
     public function index(Request $request)
     {
         $title = "Daftar Antrian Saat ini";
+        $polyclinics = Polyclinic::all();
 
         $queues = MQueue::where('queue_date', date('Y-m-d'))->orderBy('queue_position', 'ASC')->orderBy('current_position', 'DESC')->limit(3)->get();
-
-        if ($request->poly) {
-            $queues = MQueue::where('polyclinic_id', $request->poly)->where('queue_date', date('Y-m-d'))
-                ->orderBy('queue_position', 'ASC')->orderBy('current_position', 'DESC')->limit(3)->get();
+        $queue_dates = [];
+        if ($request->polyclinic) {
+            $queues = MQueue::where('polyclinic_id', $request->polyclinic)->where('current_position', '!=', 2)
+                ->orderBy('queue_date', 'ASC')->orderBy('queue_position', 'ASC')->orderBy('current_position', 'DESC')
+                ->limit(3)->get();
+            $queue_dates = Arr::pluck(MQueue::select('queue_date')->distinct()->where('polyclinic_id', $request->polyclinic)->get(), 'queue_date');
         }
 
         if ($request->date) {
             $queues = MQueue::where('polyclinic_id', $request->polyclinic)->where('queue_date', $request->date)
-                ->orderBy('queue_position', 'ASC')->orderBy('current_position', 'DESC')->limit(3)->get();
+                ->where('current_position', 2)->orderBy('queue_position', 'ASC')->orderBy('current_position', 'DESC')->limit(3)->get();
         }
 
-        return view('queues.index', compact('title', 'queues'));
+        return view('queues.index', compact('title', 'queues', 'polyclinics', 'queue_dates'));
     }
 
     public function register()
