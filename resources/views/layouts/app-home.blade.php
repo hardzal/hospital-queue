@@ -81,12 +81,11 @@
                 <!-- Right navbar links -->
                 <ul class="order-1 order-md-3 navbar-nav navbar-no-expand ml-auto">
                     <li class="nav-item">
-                        <a class="nav-link" href="{{ route('patient.logout') }}" onclick="event.preventDefault();
-                                      document.getElementById('logout-form').submit();confirm('Are you sure?')">
-                            <i class="nav-icon fas fa-sign-out-alt"></i>
+                        <a href="{{ route('patient.logout') }}" class="nav-link" onclick="event.preventDefault();
+                                      document.getElementById('logout-link').submit(); confirm('Apakah Anda yakin?')">
+                            Logout
                         </a>
-                        <form id="logout-form" action="{{ route('patient.logout') }}" method="POST" class="d-none">
-
+                        <form id="logout-link" action="{{ route('patient.logout') }}" method="POST" class="d-none">
                             @csrf
                         </form>
                     </li>

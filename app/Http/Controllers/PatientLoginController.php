@@ -16,7 +16,7 @@ class PatientLoginController extends Controller
 
     public function __construct()
     {
-        $this->middleware('guest:patient')->except('postLogout')->except('index');
+        $this->middleware('guest:patient')->except('index')->except('postLogout');
     }
 
     public function index()
@@ -65,11 +65,15 @@ class PatientLoginController extends Controller
         return redirect()->route('patient.register')->with('message', 'Successfully register!');
     }
 
+    public function hello()
+    {
+        dd("hello?");
+    }
+
     public function postLogout()
     {
         auth()->guard('patient')->logout();
         session()->flush();
-
         return redirect()->route('patient.login');
     }
 }

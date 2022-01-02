@@ -23,20 +23,50 @@
             <div class="card-body">
                 <a href="{{ route('queue.register') }}" class="btn btn-primary">Daftar Antrian Baru</a>
 
-                <p class="card-text mt-3">
-                    @if($queue_user->count())
-                    <strong>Anda sedang berada di antrian!</strong>
-                <h3>{{ substr($queue_user->get()->first()->polyclinic->code,
-                    0,2).expandingNumberSize($queue_user->get()->first()->queue_position) }}</h3>
+                @if($queue_user->count())
+                <h3>Daftar Antrian Anda Saat ini</h3>
 
-                <button href="{{ route('patient.print', ['queue' => $queue_user->get()->first()->id]) }}"
+                <table class="table table-bordered table-striped table-responsive-sm">
+                    <thead>
+                        <tr>
+                            <th>No</th>
+                            <th>Kode RM</th>
+                            <th>Poli</th>
+                            <th>Status</th>
+                            <th>Waktu Daftar</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach($queue_user as $item)
+                        <tr>
+                            <td>{{ $loop->iteration }}</td>
+                            <td>{{ $item->polyclinic->code.expandingNumberSize($item->queue_position) }}</td>
+                            <td>{{ $item->polyclinic->name }}</td>
+                            <td> @if($item->status == 1)
+                                <span class="badge badge-warning">waiting</span>
+                                @elseif($item->status == 2)
+                                <span class="badge badge-success">success</span>
+                                @else
+                                <span class="badge badge-danger">skipped</span>
+                                @endif
+                            </td>
+                            <td>{{ $item->queue_date }}</td>
+                        </tr>
+                        @endforeach
+                    </tbody>
+                    </thead>
+                </table>
+                {{--
+                <h3>{{ substr($queue_user->get()->polyclinic->code,
+                    0,2).expandingNumberSize($queue_user->get()->first()->queue_position) }}</h3> --}}
+                {{-- <button href="{{ route('patient.print', ['queue' => $queue_user->get()->first()->id]) }}"
                     class="btn btn-success btn-md" type="button"
                     onClick="openWin('{{ route('patient.print', ['queue' => $queue_user->get()->first()->id]) }}');">
                     <i class="fas fa-print mr-2"></i>
                     Cetak
-                </button>
+                </button> --}}
                 @else
-                Anda belum mendaftar kedalam antrian!
+                <p>Anda belum mendaftar kedalam antrian!</p>
                 @endif
                 </p>
 
@@ -151,3 +181,4 @@
     }
 </script>
 @endpush
+

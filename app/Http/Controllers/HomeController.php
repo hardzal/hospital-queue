@@ -3,11 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Models\DoctorSchedule;
+use App\Models\Medicalrecord;
 use App\Models\MQueue;
 use Illuminate\Http\Request;
 use Mike42\Escpos\Printer;
-use Mike42\Escpos\PrintConnectors\FilePrintConnector;
-use Mike42\Escpos\EscposImage;
 use Mike42\Escpos\PrintConnectors\WindowsPrintConnector;
 
 class HomeController extends Controller
@@ -35,7 +34,7 @@ class HomeController extends Controller
         $doctorschedules = DoctorSchedule::all();
         $queue_user = [];
         if (auth()->check()) {
-            $queue_user = MQueue::where('patient_id', auth()->user()->id)->where('status', 1);
+            $queue_user = MQueue::where('patient_id', auth()->user()->id)->where('status', 1)->get();
         }
 
         return view('home.index', compact('title', 'queues', 'doctorschedules', 'queue_user'));
@@ -50,8 +49,8 @@ class HomeController extends Controller
     public function histories()
     {
         $title = "History Medic Record";
-
-        return view('home.histories', compact('title'));
+        $medicalrecords = Medicalrecord::where('patient_id', auth()->user()->id);
+        return view('home.histories', compact('title', 'medicalrecords'));
     }
 
     public function test_print()

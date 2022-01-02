@@ -22,6 +22,7 @@
             </div>
 
             <div class="card-body">
+                @if(!empty($emdicalrecords))
                 <table class="table table-bordered">
                     <thead>
                         <tr>
@@ -33,7 +34,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach($medicalrecord as $medicalrecord)
+                        @foreach($medicalrecords as $medicalrecord)
                         <tr>
                             <td>{{ $loop->iteration }}</td>
                             <td>{{ $medicalrecord->polyclinic->name }}</td>
@@ -52,6 +53,9 @@
                         @endforeach
                     </tbody>
                 </table>
+                @else
+                <p>Belum ada riwayat.</p>
+                @endif
             </div>
         </div>
     </div>

@@ -32,11 +32,14 @@
                 <h3>Posisi Antrian</h3>
             </div>
             <div class="card-body">
-                @if($queue)
-                @if($queue == 404)
+                @if(is_int($queue))
+                @if($queue==404)
                 <div class="alert alert-warning">
                     <p>Jadwal belum tersedia!</p>
                 </div>
+                @else
+                <p>Tidak ditemukan!</p>
+                @endif
                 @else
                 <h1>{{ $queue->polyclinic->code }}{{ expandingNumberSize($queue->queue_position) }}</h1>
 
@@ -44,11 +47,6 @@
                     <i class="fas fa-print mr-2"></i>
                     Cetak
                 </a>
-                @endif
-                @else
-                <div class="alert alert-danger">
-                    <p>Data tidak ditemukan!</p>
-                </div>
                 @endif
             </div>
         </div>
