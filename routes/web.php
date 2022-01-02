@@ -81,5 +81,9 @@ Route::group(['prefix' => 'inside', 'middleware' => 'auth'], function () {
     Route::get('/queues/list/{polyclinic_id?}/{queue_date?}', [QueueController::class, 'lists'])->name('queues.list');
     Route::post('/queues/{queue}', [QueueController::class, 'update'])->name('queues.update');
     Route::delete('/queues/{queue}', [QueueController::class, 'delete'])->name('queues.destroy');
+
+    Route::group(['middleware' => ['staff', 'doctor']], function () {
+        Route::get('/queue_list', [QueueController::class, 'queue_list'])->name('queue.list');
+    });
 });
 Route::get('test_print', [HomeController::class, 'test_print']);

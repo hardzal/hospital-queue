@@ -18,8 +18,8 @@
   - [x] Jadwal Dokter
   - [ ] Antrian
 - [ ] Pendaftaran
-- [ ] Login
+- [x] Login
 - [ ] Antrian Realtime
 - [ ] WA Send
-- [ ] Dashboard
+- [x] Dashboard
 - [ ] Profil Page

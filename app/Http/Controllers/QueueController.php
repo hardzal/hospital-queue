@@ -357,4 +357,8 @@ class QueueController extends Controller
         }
         return view('queues.show', compact('title', 'queue'));
     }
+
+    public function queue_list() {
+
+    }
 }
