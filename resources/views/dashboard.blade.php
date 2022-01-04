@@ -88,14 +88,97 @@
         <!-- /.row -->
         <!-- Main row -->
         <div class="row">
-
+            <div class="col-lg-12">
+                @if(count($queue))
+                <div class="alert alert-info p-5 text-center">
+                    <p>
+                    <h1>No Antrian : {{ expandingNumberSize($queue->first()->queue_position) }}</h1>
+                    <h2>{{ $queue->first()->polyclinic->code.expandingNumberSize($queue->first()->queue_position) }}
+                    </h2>
+                    <h3>{{ $queue->first()->polyclinic->name }}</h3>
+                    </p>
+                </div>
+            </div>
+            <div class="col-lg-4 text-center">
+                <form method="POST" action="{{ route('queues.update', ['queue' => $queue->first()->id]) }}">
+                    <input type="hidden" name="queue_id" value="{{ $queue->first()->id }}" />
+                    <input type="hidden" name="type" value="prev" />
+                    <input type="hidden" name="current_position" value=0 />
+                    <input type="hidden" name="status" value=2 />
+                    <button type="submit">
+                        <i class="fas fa-arrow-circle-left"></i>
+                    </button>
+                </form>
+            </div>
+            <div class="col-lg-4 text-center">
+                <form method="POST" action="{{ route('queue.call', ['queue' => $queue->first()->id]) }}">
+                    <input type="hidden" name="queue_id">
+                    <button type="submit" class="btn btn-primary">Panggil</button>
+                </form>
+            </div>
+            <div class="col-lg-4 text-center">
+                <form method="POST" action="{{ route('queues.update', ['queue' => $queue->first()->id]) }}">
+                    <input type="hidden" name="queue_id" value="{{ $queue->first()->id }}" />
+                    <input type="hidden" name="current_position" value=0 />
+                    <input type="hidden" name="status" value=2 />
+                    <input type="hidden" name="type" value="next" />
+                    <button type="submit">
+                        <i class="fas fa-arrow-circle-right"></i>
+                    </button>
+                </form>
+            </div>
+            @else
+            <div class="alert alert-danger p-5 text-center">
+                <h2>Antrian belum tersedia!</h2>
+            </div>
+            @endif
         </div>
         <!-- /.row (main row) -->
+        <div class="row">
+            <div class="col-md-4">
+                <div class="card">
+                    <div class="card-header">
+                        <h3>Antrian Selajutnya</h3>
+                    </div>
+                    <div class="card-body">
+                        <table class="table table-bordered">
+                            <thead>
+                                <tr>
+                                    <th>Kode RM</th>
+                                    <th>No Antrian</th>
+                                    <th>Poli</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach($queues as $queue)
+                                <tr>
+                                    <td>{{ $queue->polyclinic->code . expandingNumberSize($queue->queue_position)}}</td>
+                                    <td>{{ $queue->queue_position }}</td>
+                                    <td>{{ $queue->polylclinic->name }}</td>
+                                </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-8">
+                <div class="card">
+                    <div class="card-header">
+                        <h3>Jadwal Dokter</h3>
+                    </div>
+                    <div class="card-body">
+                        <table class="table table-bordered">
+                            
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div><!-- /.container-fluid -->
 </section>
 <!-- /.content -->
 @endsection
-
 
 @push('scripts')
 <!-- AdminLTE dashboard demo (This is only for demo purposes) -->

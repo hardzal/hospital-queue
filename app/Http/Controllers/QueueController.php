@@ -184,7 +184,16 @@ class QueueController extends Controller
         $queue->status = $request->status;
         $queue->save();
 
-        // status == 2 -> 'done'
+        if ($request->current_position == 0) {
+            if ($request->type == 'next') {
+                $queue_current = MQueue::where('queue_position', $queue->queue_position + 1)->where('queue_date', $queue->queue_date)->get()->first();
+            } else if ($request->type == 'prev') {
+                $queue_current = MQueue::where('queue_position', $queue->queue_position - 1)->where('queue_date', $queue->queue_date)->get()->first();
+            }
+            $queue_current->current_position = 1;
+            $queue_current->save();
+        }
+
         if ($request->status == 2) {
             $history_medics = [
                 'patient_id' => $queue->patient_id,
@@ -356,5 +365,9 @@ class QueueController extends Controller
             $queue = MQueue::where('polyclinic_id', $polyclinic->id)->where('queue_date', $queue_date)->where('queue_position', $queue_position)->get()->first();
         }
         return view('queues.show', compact('title', 'queue'));
+    }
+
+    public function call(MQueue $queue)
+    {
     }
 }

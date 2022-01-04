@@ -2,15 +2,19 @@
 
 namespace App\Models;
 
+use App\Events\UpdateQueue;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class MQueue extends Model
 {
     use HasFactory;
     protected $table = 'queues';
     protected $guarded = [];
+
+    protected $dispatched = [
+        'updated' => UpdateQueue::class
+    ];
 
     public function polyclinic()
     {
