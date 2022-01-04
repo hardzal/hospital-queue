@@ -95,7 +95,7 @@
             </li>
             @else
             <li class="nav-item">
-                <a href="#" class="nav-link">
+                <a href="{{ route('queues.list') }}" class="nav-link">
                     <i class="nav-icon fas fa-layer-group"></i>
                     <p>Antrian</p>
                 </a>

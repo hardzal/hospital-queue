@@ -48,6 +48,7 @@ Route::get('/', [PatientLoginController::class, 'index'])->name('home');
 Route::get('/queues/{poly?}/{date?}', [QueueController::class, 'index'])->name('queues');
 Route::get('/schedules', [DoctorController::class, 'index'])->name('doctor.schedule');
 Route::post('/queue/new', [QueueController::class, 'newQueue'])->name('queue.new');
+
 Route::post('/queue/search', [QueueController::class, 'search'])->name('queue.search');
 Route::get('/queue/{queue}', [QueueController::class, 'show'])->name('queue.show');
 Route::get('/print/{queue}', [HomeController::class, 'print'])->name('patient.print');
@@ -82,8 +83,6 @@ Route::group(['prefix' => 'inside', 'middleware' => 'auth'], function () {
     Route::post('/queues/{queue}', [QueueController::class, 'update'])->name('queues.update');
     Route::delete('/queues/{queue}', [QueueController::class, 'delete'])->name('queues.destroy');
 
-    Route::group(['middleware' => ['staff', 'doctor']], function () {
-        Route::get('/queue_list', [QueueController::class, 'queue_list'])->name('queue.list');
-    });
+    Route::post('/queue/{queue}/call', [QueueController::class, 'call'])->name('queue.call');
 });
 Route::get('test_print', [HomeController::class, 'test_print']);

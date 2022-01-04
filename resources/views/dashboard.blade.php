@@ -23,7 +23,7 @@
 <section class="content">
     <div class="container-fluid">
         <!-- Small boxes (Stat box) -->
-        <div class="row">
+        {{-- <div class="row">
             <div class="col-lg-3 col-6">
                 <!-- small box -->
                 <div class="small-box bg-info">
@@ -84,18 +84,152 @@
                 </div>
             </div>
             <!-- ./col -->
-        </div>
+        </div> --}}
         <!-- /.row -->
         <!-- Main row -->
         <div class="row">
-
+            <div class="col-lg-12">
+                @if(count($queue))
+                <div class="alert alert-info p-5 text-center">
+                    <p>
+                    <h1>No Antrian : {{ expandingNumberSize($queue->first()->queue_position) }}</h1>
+                    <h2>{{ $queue->first()->polyclinic->code . expandingNumberSize($queue->first()->queue_position) }}
+                    </h2>
+                    <h3>{{ $queue->first()->polyclinic->name }}</h3>
+                    </p>
+                </div>
+            </div>
+            <div class="col-lg-4 text-center">
+                <form method="POST" action="{{ route('queues.update', ['queue' => $queue->first()->id]) }}">
+                    @csrf
+                    <input type="hidden" name="queue_id" value="{{ $queue->first()->id }}" />
+                    <input type="hidden" name="type" value="prev" />
+                    <input type="hidden" name="current_position" value=0 />
+                    <input type="hidden" name="status" value=2 />
+                    <button type="submit">
+                        <i class="fas fa-arrow-circle-left"></i>
+                    </button>
+                </form>
+            </div>
+            <div class="col-lg-4 text-center">
+                <form method="POST" action="{{ route('queue.call', ['queue' => $queue->first()->id]) }}"
+                    style=" display:inline!important;">
+                    @csrf
+                    <input type="hidden" name="queue_id" value="{{ $queue->first()->id }}">
+                    <button type="submit" class="btn btn-primary" style="display:inlien;">CALL</button>
+                </form>
+                <form method="POST" action="{{ route('queues.update', ['queue' => $queue->first()->id ]) }}"
+                    style=" display:inline!important;">
+                    @csrf
+                    <input type="hidden" name="queue_id" value="{{ $queue->first()->id }}" />
+                    <input type="hidden" name="current_position" value=0 />
+                    <input type="hidden" name="status" value=0 />
+                    <input type="hidden" name="type" value="skip" />
+                    <button type="submit" class="btn btn-secondary" style="display:inlien;">
+                        SKIP
+                    </button>
+                </form>
+            </div>
+            <div class="col-lg-4 text-center">
+                <form method="POST" action="{{ route('queues.update', ['queue' => $queue->first()->id]) }}">
+                    @csrf
+                    <input type="hidden" name="queue_id" value="{{ $queue->first()->id }}" />
+                    <input type="hidden" name="current_position" value=0 />
+                    <input type="hidden" name="status" value=2 />
+                    <input type="hidden" name="type" value="next" />
+                    <button type="submit">
+                        <i class="fas fa-arrow-circle-right"></i>
+                    </button>
+                </form>
+            </div>
+            @else
+            <div class="alert alert-danger p-5 text-center">
+                <h2>Antrian belum tersedia!</h2>
+            </div>
+            @endif
         </div>
         <!-- /.row (main row) -->
+        <div class="row mt-5">
+            <div class="col-md-4">
+                <div class="card">
+                    <div class="card-header">
+                        <h3>Antrian Selajutnya</h3>
+                    </div>
+                    <div class="card-body">
+                        @if(count($queues))
+                        <table class="table table-bordered">
+                            <thead>
+                                <tr>
+                                    <th>Kode RM</th>
+                                    <th>No Antrian</th>
+                                    <th>Poli</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach($queues as $item)
+                                <tr>
+                                    <td>{{ $item->polyclinic->code . expandingNumberSize($item->queue_position)}}</td>
+                                    <td>{{ $item->queue_position }}</td>
+                                    <td>{{ $item->polylclinic->name }}</td>
+                                </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                        @else
+                        <p>Tidak ada antrian lanjutan saat ini!</p>
+                        @endif
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-8">
+                <div class="card card-primary card-outline">
+                    <div class="card-header">
+                        Daftar Jadwal Dokter Hari ini
+                    </div>
+                    <div class="card-body">
+                        <table class="table table-bordered" id="data_schedule">
+                            <thead>
+                                <tr>
+                                    <th>No</th>
+                                    <th>Poly</th>
+                                    <th>Nama Dokter</th>
+                                    <th>Jadwal Dokter</th>
+                                    <th>Quota</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach($doctorschedules as $doctorschedule)
+                                <tr>
+                                    <td>{{ $loop->iteration }}</td>
+                                    <td>{{ $doctorschedule->polyclinic->name }}</td>
+                                    <td>{{ $doctorschedule->doctor->name }}</td>
+                                    <td>{{ $doctorschedule->schedule->day_start. " s/d ".
+                                        $doctorschedule->schedule->day_end . "
+                                        - ".
+                                        $doctorschedule->schedule->time_start . " - ".
+                                        $doctorschedule->schedule->time_end }}</td>
+                                    <td>@if($doctorschedule->checkQuota($doctorschedule->id) == 0)
+                                        <span class="badge badge-danger">PENUH</span>
+                                        @else
+                                        <span class="badge badge-success">{{
+                                            $doctorschedule->checkQuota($doctorschedule->id) }}</span>
+                                        @endif
+                                    </td>
+                                </tr>
+                                @endforeach
+                            </tbody>
+                            <tfoot>
+
+                            </tfoot>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div><!-- /.container-fluid -->
 </section>
 <!-- /.content -->
 @endsection
-
 
 @push('scripts')
 <!-- AdminLTE dashboard demo (This is only for demo purposes) -->

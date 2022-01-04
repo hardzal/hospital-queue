@@ -183,9 +183,21 @@ class QueueController extends Controller
         $queue->current_position = $request->current_position;
         $queue->status = $request->status;
         $queue->save();
+        $queue_current = null;
 
-        // status == 2 -> 'done'
-        if ($request->status == 2) {
+        if ($request->current_position == 0) {
+            if ($request->type == 'next') {
+                $queue_current = MQueue::where('queue_position', $queue->queue_position + 1)->where('queue_date', $queue->queue_date)->get()->first();
+            } else if ($request->type == 'prev') {
+                $queue_current = MQueue::where('queue_position', $queue->queue_position - 1)->where('queue_date', $queue->queue_date)->get()->first();
+            }
+            if ($queue_current != null) {
+                $queue_current->current_position = 1;
+                $queue_current->save();
+            }
+        }
+
+        if ($queue_current != null && $request->status == 2) {
             $history_medics = [
                 'patient_id' => $queue->patient_id,
                 'doctor_schedule_id' => $queue->schedule_id,
@@ -195,6 +207,10 @@ class QueueController extends Controller
             ];
 
             Medicalrecord::create($history_medics);
+        }
+
+        if ($request->status != 2) {
+            return redirect()->route('queues.list', ['polyclinic_id' => $request->poly_id, 'queue_date' => $request->queue_date])->with('error', 'Antrian terskip, lanjut ke antrian selanjutnya');
         }
 
         return redirect()->route('queues.list', ['polyclinic_id' => $request->poly_id, 'queue_date' => $request->queue_date])->with('success', 'Lanjut ke antrian selanjutnya');
@@ -358,7 +374,7 @@ class QueueController extends Controller
         return view('queues.show', compact('title', 'queue'));
     }
 
-    public function queue_list() {
-
+    public function call(MQueue $queue)
+    {
     }
 }
