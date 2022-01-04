@@ -43,13 +43,24 @@
                 @else
                 <h1>{{ $queue->polyclinic->code }}{{ expandingNumberSize($queue->queue_position) }}</h1>
 
-                <a href="{{ route('patient.print', ['queue' => $queue->id]) }}" class="btn btn-success btn-md">
+                {{-- <a href="{{ route('patient.print', ['queue' => $queue->id]) }}" class="btn btn-success btn-md"
+                    onclick="openWin({{ route('patient.print', ['queue' => $queue->id]) }})">
                     <i class="fas fa-print mr-2"></i>
                     Cetak
-                </a>
+                </a> --}}
                 @endif
             </div>
         </div>
     </div>
 </div>
 @endsection
+
+@push('scripts')
+<script>
+    function openWin(link)
+    {
+        let myWindow = window.open(link, '', 'width=200,height=100');
+        myWindow.document.close();
+    }
+</script>
+@endpush

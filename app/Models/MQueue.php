@@ -2,7 +2,7 @@
 
 namespace App\Models;
 
-use App\Events\UpdateQueue;
+use App\Events\QueueUpdated;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -13,7 +13,7 @@ class MQueue extends Model
     protected $guarded = [];
 
     protected $dispatched = [
-        'updated' => UpdateQueue::class
+        'updated' => QueueUpdated::class
     ];
 
     public function polyclinic()

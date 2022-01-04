@@ -16,7 +16,6 @@ class PatientLoginController extends Controller
 
     public function __construct()
     {
-        $this->middleware('guest:staff')->except('index');
         $this->middleware('guest:patient')->except('index')->except('postLogout');
     }
 

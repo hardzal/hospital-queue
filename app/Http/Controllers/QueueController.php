@@ -37,7 +37,7 @@ class QueueController extends Controller
 
         if ($request->date) {
             $queues = MQueue::where('polyclinic_id', $request->polyclinic)->where('queue_date', $request->date)
-                ->where('current_position', 2)->orderBy('queue_position', 'ASC')->orderBy('current_position', 'DESC')->limit(3)->get();
+                ->where('current_position', '!=', 2)->orderBy('queue_position', 'ASC')->orderBy('current_position', 'DESC')->limit(3)->get();
         }
 
         return view('queues.index', compact('title', 'queues', 'polyclinics', 'queue_dates'));
@@ -234,12 +234,20 @@ class QueueController extends Controller
 
         /* Initialize */
         $printer->initialize();
-        $text = $queue->polyclinic->code . expandingNumberSize($queue->queue_position);
+        $text = $queue->polyclinic->code . " | " . expandingNumberSize($queue->queue_position);
         $poly = $queue->polyclinic->name;
         /* Text */
+        $printer->setTextSize(2, 1);
+        $printer->setJustification(
+            Printer::JUSTIFY_CENTER,
+        );
+        $printer->text("Rumah Sakit Ananda\n\n");
+        $printer->setTextSize(2, 2);
         $printer->text("$text\n");
-        $printer->text("\n");
-        $printer->text("$poly");
+        $printer->setTextSize(1, 1);
+        $printer->text("$poly\n\n");
+        $printer->setTextSize(1, 1);
+        $printer->text(date("Y/m/d H:i:s") . "\n\n");
         $printer->cut();
 
         /* Always close the printer! On some PrintConnectors, no actual
@@ -290,7 +298,8 @@ class QueueController extends Controller
         $today = date('Y-m-d');
         $last = MQueue::where('polyclinic_id', $polyclinic_id)
             ->where('queue_date', $today)
-            ->orderBy('queue_date', 'DESC');
+            ->orderBy('queue_date', 'DESC')
+            ->orderBy('queue_position', 'DESC');
 
         $queue_position = 1;
         if (!empty($doctor_schedule)) {
@@ -313,10 +322,14 @@ class QueueController extends Controller
             }
 
             if ($last->where('patient_id', $request->patient_id)->count()) {
-                return redirect()->route('queues')->with('error', 'Anda sudah mengantri!');
+                if ($request->patient_id != 6) {
+                    return redirect()->route('queues')->with('error', 'Anda sudah mengantri!');
+                }
             }
 
-            $queue_position = $last->get()->first()->queue_position + 1;
+            if ($last->get()->first()) {
+                $queue_position = $last->get()->first()->queue_position + 1;
+            }
         }
 
         $current_position = 0;
@@ -337,7 +350,7 @@ class QueueController extends Controller
 
         $queue = MQueue::create($data);
 
-        $this->print($queue->id);
+        $this->print($queue);
 
         return redirect()->route('queue.show', ['queue' => $queue->id])->with('success', 'Berhasil mendaftar ke dalam antrian');
     }
