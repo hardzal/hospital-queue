@@ -80,6 +80,7 @@
 
                 <!-- Right navbar links -->
                 <ul class="order-1 order-md-3 navbar-nav navbar-no-expand ml-auto">
+                    @auth('patient')
                     <li class="nav-item">
                         <a href="{{ route('patient.logout') }}" class="nav-link" onclick="event.preventDefault();
                                       document.getElementById('logout-link').submit(); confirm('Apakah Anda yakin?')">
@@ -89,6 +90,7 @@
                             @csrf
                         </form>
                     </li>
+                    @endauth
                     <!-- Messages Dropdown Menu -->
                     {{-- <li class="nav-item dropdown">
                         <a class="nav-link" data-toggle="dropdown" href="#">
