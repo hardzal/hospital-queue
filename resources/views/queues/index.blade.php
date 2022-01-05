@@ -59,7 +59,10 @@
         @endif
     </div>
     <div class="col-md-12">
-        <queue-component :queue="{!! json_encode($queue->first()) !!}"></queue-component>
+        @php
+        $queue->first()->queue_position = expandingNumberSize($queue->first()->queue_position);
+        @endphp
+        <queue-component :data="{{ json_encode($queue->first()) }}"></queue-component>
     </div>
     @auth
     <queue-update-component :queueId="{{ $queue->id }}"

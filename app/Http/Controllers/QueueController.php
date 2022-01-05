@@ -51,8 +51,9 @@ class QueueController extends Controller
         $queues_data->data = $queues;
         $queues_data->time = $queue_dates;
 
-        $queue_today = MQueue::where('queue_date', date('Y-m-d'));
+        $queue_today = MQueue::with('polyclinic', 'doctorschedule', 'patient')->where('queue_date', date('Y-m-d'));
         $queue = $queue_today->where('current_position', 1)->get();
+        
         return view('queues.index', compact('title', 'queue', 'queues_data', 'polyclinics', 'queue_dates'));
     }
 

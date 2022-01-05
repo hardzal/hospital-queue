@@ -1,9 +1,14 @@
 require('./bootstrap');
 
-window.Vue = require('vue');
+// window.Vue = require('vue');
+import Vue from 'vue'
+// import Coba from './components/Coba.vue'
+import QueueComponent from './components/QueueComponent.vue';
+import QueueUpdateComponent from './components/QueueUpdateComponent.vue';
 
 Vue.component('queue-component', require('./components/QueueComponent.vue').default);
 Vue.component('queue-update-component', require('./components/QueueUpdateComponent.vue').default);
+// Vue.component('coba', require("./components/Coba.vue").default);
 
 const app = new Vue({
     el: '#app',
@@ -15,5 +20,8 @@ const app = new Vue({
                 console.log("Antrian selanjutnya!")
             });
     },
-    render:
+    components: {
+        QueueComponent,
+        QueueUpdateComponent,
+    }
 });

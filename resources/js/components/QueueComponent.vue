@@ -1,9 +1,9 @@
 <template>
     <div>
         <div class="alert alert-info p-5 text-center">
-            <h1>No Antrian : {{ queue.position }}</h1>
-            <h2>{{ queue.code + queue.position }}</h2>
-            <h3>{{ queue.polyclinic.name }}</h3>
+            <h1>No Antrian : {{ queue.queue_position }}</h1>
+            <h2>{{ queue.polyclinic.code }}{{ queue.queue_position }}</h2>
+            <h3>{{ data.polyclinic.name }}</h3>
         </div>
     </div>
 </template>
@@ -12,14 +12,18 @@
 export default {
     data() {
         return {
-            queue: null,
+            queue: this.data,
         }
     },
+    props: ['data'],
     mounted() {
         Echo.channel('queue.updated')
             .listen('QueueUpdated', (e) => {
                 this.queue = e.queue;
             })
+    },
+    created() {
+        console.log(this.data);
     },
 }
 </script>
