@@ -12,6 +12,7 @@ use App\Http\Controllers\QueueController;
 use App\Http\Controllers\ScheduleController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\WhatsAppController;
+use App\Models\MQueue;
 use App\Models\Queue;
 use Illuminate\Support\Facades\Route;
 
@@ -86,3 +87,8 @@ Route::group(['prefix' => 'inside', 'middleware' => 'auth'], function () {
     Route::post('/queue/{queue}/call', [QueueController::class, 'call'])->name('queue.call');
 });
 Route::get('test_print', [HomeController::class, 'test_print']);
+
+Route::get('/updateQueue', function (MQueue $queue) {
+    event(new \App\Events\QueueUpdated($queue));
+    return "Event has been sent!";
+});

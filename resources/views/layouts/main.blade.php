@@ -102,6 +102,7 @@
     <script src="{{ asset('dist/js/adminlte.js') }}"></script>
     <!-- AdminLTE for demo purposes -->
     {{-- <script src="{{ asset('dist/js/demo.js') }}"></script> --}}
+    <script src="{{ mix('js/app.js') }}" defer></script>
 
     @stack('scripts')
 </body>

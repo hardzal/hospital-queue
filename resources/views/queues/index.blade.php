@@ -50,7 +50,7 @@
         <div class="alert alert-success alert-dismissible fade show" role="alert">
             {{ session("success") }}
         </div>
-        @endif                                                                                                                                                                                                                                         
+        @endif
 
         @if(session()->has('error'))
         <div class="alert alert-danger alert-dismissible fade show" role="alert">
@@ -59,49 +59,21 @@
         @endif
     </div>
     <div class="col-md-12">
-        @if(count($queues))
-        @foreach($queues as $queue)
-        <div class="card">
-            @if(in_array($queue->queue_date, $queue_dates))
-            <div class="card-header">
-                <h3>{{ date('d F Y', strtotime($queue->queue_date))}}</h3>
-            </div>
-            @endif
-
-            <div class="card-body">
-                <div class="row">
-                    <div class="col-lg-4">
-                        @if($queue->current_position == 1)
-                        <div class="small-box bg-primary p-5 text-center">
-                            <div class="inner">
-                                <h2>{{ $queue->polyclinic->code }}{{
-                                    expandingNumberSize($queue->queue_position)
-                                    }}</h2>
-                            </div>
-                        </div>
-                        @else
-                        <div class="small-box bg-secondary p-5 text-center">
-                            <div class="inner">
-                                <h2>{{ $queue->polyclinic->code }}{{
-                                    expandingNumberSize($queue->queue_position)
-                                    }}</h2>
-                            </div>
-                        </div>
-                        @endif
-                    </div>
-                </div>
-            </div>
-        </div>
-        @endforeach
-        @else
-        <div class="card">
-            <div class="card-body">
-                <p class="alert alert-danger">
-                    Belum ada antrian
-                </p>
-            </div>
-        </div>
-        @endif
+        <queue-component :queue="{!! json_encode($queue->first()) !!}"></queue-component>
     </div>
+    @auth
+    <queue-update-component :queueId="{{ $queue->id }}"
+        :link="{{ route('queues.update', ['queue' => $queue->first()->id])  }}"></queue-update-component>
+    @endauth
 </div>
 @endsection
+
+@push('scripts')
+<script>
+    window.Laravel = {!! json_encode([
+        'csrfToken' => csrf_token(),
+        'pusherKey' => config('broadcasting.connections.pusher.key'),
+        'pusherCluster' => config('broadcasting.connections.pusher.options.cluster')
+    ]) !!};
+</script>
+@endpush

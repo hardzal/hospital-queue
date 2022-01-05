@@ -34,6 +34,7 @@ class QueueUpdated implements ShouldBroadcast
      */
     public function broadcastOn()
     {
-        return new PrivateChannel('queue.updated');
+        return new Channel('queue.updated');
+        // return ['global-notif'];
     }
 }

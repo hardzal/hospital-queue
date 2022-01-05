@@ -26,21 +26,34 @@ class QueueController extends Controller
         $title = "Daftar Antrian Saat ini";
         $polyclinics = Polyclinic::all();
 
-        $queues = MQueue::where('queue_date', date('Y-m-d'))->orderBy('queue_position', 'ASC')->orderBy('current_position', 'DESC')->limit(3)->get();
+        $queues = MQueue::where('queue_date', date('Y-m-d'))->orderBy('queue_position', 'ASC')->orderBy('current_position', 'DESC')->get();
         $queue_dates = [];
         if ($request->polyclinic) {
             $queues = MQueue::where('polyclinic_id', $request->polyclinic)->where('current_position', '!=', 2)
                 ->orderBy('queue_date', 'ASC')->orderBy('queue_position', 'ASC')->orderBy('current_position', 'DESC')
-                ->limit(3)->get();
+                ->get();
             $queue_dates = Arr::pluck(MQueue::select('queue_date')->distinct()->where('polyclinic_id', $request->polyclinic)->get(), 'queue_date');
         }
 
         if ($request->date) {
             $queues = MQueue::where('polyclinic_id', $request->polyclinic)->where('queue_date', $request->date)
-                ->where('current_position', '!=', 2)->orderBy('queue_position', 'ASC')->orderBy('current_position', 'DESC')->limit(3)->get();
+                ->where('current_position', '!=', 2)->orderBy('queue_position', 'ASC')->orderBy('current_position', 'DESC')->get();
         }
 
-        return view('queues.index', compact('title', 'queues', 'polyclinics', 'queue_dates'));
+        if ($request->polyclinic == 0) {
+            $queues = MQueue::where('current_position', '!=', 2)->where('queue_date', '>=', date('Y-m-d'))
+                ->orderBy('queue_date', 'ASC')->orderBy('queue_position', 'ASC')->orderBy('current_position', 'DESC')
+                ->get();
+            $queue_dates = Arr::pluck(MQueue::select('queue_date')->where('current_position', '!=', 2)->where('queue_date', '>=', date('Y-m-d'))->orderBy('queue_date', 'ASC')->distinct()->get(), 'queue_date');
+        }
+
+        $queues_data = new stdClass;
+        $queues_data->data = $queues;
+        $queues_data->time = $queue_dates;
+
+        $queue_today = MQueue::where('queue_date', date('Y-m-d'));
+        $queue = $queue_today->where('current_position', 1)->get();
+        return view('queues.index', compact('title', 'queue', 'queues_data', 'polyclinics', 'queue_dates'));
     }
 
     public function register()
@@ -210,10 +223,17 @@ class QueueController extends Controller
         }
 
         if ($request->status != 2) {
-            return redirect()->route('queues.list', ['polyclinic_id' => $request->poly_id, 'queue_date' => $request->queue_date])->with('error', 'Antrian terskip, lanjut ke antrian selanjutnya');
+            // return redirect()->route('queues.list', ['polyclinic_id' => $request->poly_id, 'queue_date' => $request->queue_date])->with('error', 'Antrian terskip, lanjut ke antrian selanjutnya');
+            return response()->json([
+                'message' => 'Antrian terskip, lanjut ke antrian selanjutnya'
+            ]);
         }
 
-        return redirect()->route('queues.list', ['polyclinic_id' => $request->poly_id, 'queue_date' => $request->queue_date])->with('success', 'Lanjut ke antrian selanjutnya');
+        // return redirect()->route('queues.list', ['polyclinic_id' => $request->poly_id, 'queue_date' => $request->queue_date])->with('success', 'Lanjut ke antrian selanjutnya');
+
+        return response()->json([
+            'message' => 'Lanjut ke antrian selanjutnya'
+        ]);
     }
 
     public function delete(MQueue $queue)
