@@ -16,7 +16,7 @@ class DashboardController extends Controller
 
         // ketika menggunakan eloquent harus menggunakan object yang berbeda
         $queue_today = MQueue::with('polyclinic', 'doctorschedule', 'patient')->where('queue_date', date('Y-m-d'));
-        $queues = $queue_today->where('current_position', 0)->where('status', '<', 2)->orderBy('queue_position', 'ASC')->get();
+        $queues = $queue_today->where('current_position', 0)->where('status', '!=', 0)->where('status', '!=', 2)->orderBy('queue_position', 'ASC')->get();
         $doctorschedules = DoctorSchedule::all();
 
         return view('dashboard', compact('title', 'queue', 'doctorschedules', 'queues'));

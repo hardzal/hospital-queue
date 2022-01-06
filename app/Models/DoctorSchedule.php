@@ -48,7 +48,7 @@ class DoctorSchedule extends Model
 
     public function checkQuota($id)
     {
-        $queue = DB::table('queues')->where('doctor_schedule_id', $id)->count();
+        $queue = DB::table('queues')->where('queue_date', '>=', date('Y-m-d'))->where('status', '>=', 1)->where('doctor_schedule_id', $id)->count();
         $rest = ($this->where('id', $id)->get()->first()->quota) - ($queue);
 
         return $rest;

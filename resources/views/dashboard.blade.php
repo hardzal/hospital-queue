@@ -95,6 +95,7 @@
                 @endphp
                 <queue-component :data="{{ json_encode($queue->first()) }}"></queue-component>
             </div>
+
             <div class="col-lg-4 text-center">
                 <form method="POST" action="{{ route('queues.update', ['queue' => $queue->first()->id]) }}">
                     @csrf
@@ -107,6 +108,7 @@
                     </button>
                 </form>
             </div>
+
             <div class="col-lg-4 text-center">
                 <form method="POST" action="{{ route('queue.call', ['queue' => $queue->first()->id]) }}"
                     style=" display:inline!important;">
@@ -126,6 +128,7 @@
                     </button>
                 </form>
             </div>
+
             <div class="col-lg-4 text-center">
                 <form method="POST" action="{{ route('queues.update', ['queue' => $queue->first()->id]) }}">
                     @csrf
@@ -138,6 +141,7 @@
                     </button>
                 </form>
             </div>
+
             @else
             <div class="alert alert-danger p-5 text-center">
                 <h2>Antrian belum tersedia!</h2>
@@ -172,7 +176,7 @@
                             </tbody>
                         </table>
                         @else
-                        <p>Tidak ada antrian lanjutan saat ini!</p>
+                        <p class="alert alert-primary p-3">Tidak ada antrian lanjutan saat ini!</p>
                         @endif
                     </div>
                 </div>
