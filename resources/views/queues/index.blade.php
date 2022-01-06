@@ -65,10 +65,11 @@
         <queue-component :data="{{ json_encode($queue->first()) }}"></queue-component>
     </div>
     @auth
-    <queue-update-component :queueId="{{ $queue->id }}"
-        :link="{{ route('queues.update', ['queue' => $queue->first()->id])  }}"></queue-update-component>
-    @endauth
 </div>
+<queue-update-component :queueId="{{ $queue->first()->id }}"
+    :link="{{ json_encode(route('queues.update', ['queue' => $queue->first()->id]))  }}">
+</queue-update-component>
+@endauth
 @endsection
 
 @push('scripts')

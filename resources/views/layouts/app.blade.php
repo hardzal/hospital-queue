@@ -46,6 +46,11 @@
                         <li class="nav-item">
                             <a class="nav-link" href="{{ route('queues') }}">{{ __('Antrian') }}</a>
                         </li>
+                        @auth
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ route('dashboard.index') }}">{{ __('Dashboard') }}</a>
+                        </li>
+                        @endauth
                         <!-- Authentication Links -->
                         @guest
                         @if (Route::has('login'))

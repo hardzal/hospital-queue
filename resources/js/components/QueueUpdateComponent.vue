@@ -1,5 +1,16 @@
 <template>
-    <div>
+    <div class="row">
+        <div class="col-lg-4 text-center">
+            <form @submit.prevent="updateQueue">
+                <input type="hidden" name="_token" :value="csrf">
+                <input type="hidden" name="current_position" value=0 v-model="current_position"/>
+                <input type="hidden" name="status" value=2 v-model="status"/>
+                <input type="hidden" name="type" value="prev" v-model="type"/>
+                <button type="submit">
+                    <i class="fas fa-arrow-circle-left"></i>
+                </button>
+            </form>
+        </div>
         <div class="col-lg-4 text-center">
             <form @submit.prevent="callQueue"
                 style="display:inline!important;">
@@ -8,9 +19,9 @@
             </form>
             <form @submit.prevent="updateQueue"
                 style="display:inline!important;">
-                <input type="hidden" name="current_position" value=0 />
-                <input type="hidden" name="status" value=0 />
-                <input type="hidden" name="type" value="skip" />
+                <input type="hidden" name="current_position" value=0 v-model="current_position"/>
+                <input type="hidden" name="status" value=0 v-model="status"/>
+                <input type="hidden" name="type" value="skip" v-model="type"/>
                 <input type="hidden" name="_token" :value="csrf">
                 <button type="submit" class="btn btn-secondary" style="display:inline;">
                     SKIP
@@ -20,9 +31,9 @@
         <div class="col-lg-4 text-center">
             <form @submit.prevent="updateQueue">
                 <input type="hidden" name="_token" :value="csrf">
-                <input type="hidden" name="current_position" value=0 />
-                <input type="hidden" name="status" value=2 />
-                <input type="hidden" name="type" value="next" />
+                <input type="hidden" name="current_position" value=0 v-model="current_position"/>
+                <input type="hidden" name="status" value=2 v-model="status"/>
+                <input type="hidden" name="type" value="next" v-model="type"/>
                 <button type="submit">
                     <i class="fas fa-arrow-circle-right"></i>
                 </button>
@@ -49,7 +60,9 @@ export default {
                 current_position: this.current_position,
                 type: this.type,
             }).then((response) => {
-                // $('');
+
+            }).catch(error => {
+                console.log(error);
             });
         },
         callQueue() {

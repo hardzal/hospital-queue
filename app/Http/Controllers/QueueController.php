@@ -53,7 +53,7 @@ class QueueController extends Controller
 
         $queue_today = MQueue::with('polyclinic', 'doctorschedule', 'patient')->where('queue_date', date('Y-m-d'));
         $queue = $queue_today->where('current_position', 1)->get();
-        
+
         return view('queues.index', compact('title', 'queue', 'queues_data', 'polyclinics', 'queue_dates'));
     }
 
@@ -83,11 +83,11 @@ class QueueController extends Controller
                 return redirect()->route('queues')->with('error', 'Antrian sudah penuh!');
             }
 
+            $queue_position = $last->get()->first()->queue_position + 1;
+
             if ($last->where('patient_id', $validated['patient_id'])->count()) {
                 return redirect()->route('queues')->with('error', 'Anda sudah mengantri!');
             }
-
-            $queue_position = $last->get()->first()->queue_position + 1;
         }
 
         $current_position = 0;
@@ -183,7 +183,6 @@ class QueueController extends Controller
 
     public function poly(Polyclinic $polyclinic)
     {
-
         return view('queues.polys', compact('polyclinic'));
     }
 
@@ -210,12 +209,13 @@ class QueueController extends Controller
                 $queue_current->save();
             }
         }
-
+        // dd($queue);
         if ($queue_current != null && $request->status == 2) {
+
             $history_medics = [
                 'patient_id' => $queue->patient_id,
-                'doctor_schedule_id' => $queue->schedule_id,
-                'type' => $queue->type,
+                'doctor_schedule_id' => $queue->doctor_schedule_id,
+                'type' => $request->type,
                 'description' => "",
                 'queue_position' => $queue->queue_position,
             ];

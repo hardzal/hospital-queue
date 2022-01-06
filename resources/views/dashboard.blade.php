@@ -88,16 +88,12 @@
         <!-- /.row -->
         <!-- Main row -->
         <div class="row">
+            @if(count($queue))
             <div class="col-lg-12">
-                @if(count($queue))
-                <div class="alert alert-info p-5 text-center">
-                    <p>
-                    <h1>No Antrian : {{ expandingNumberSize($queue->first()->queue_position) }}</h1>
-                    <h2>{{ $queue->first()->polyclinic->code . expandingNumberSize($queue->first()->queue_position) }}
-                    </h2>
-                    <h3>{{ $queue->first()->polyclinic->name }}</h3>
-                    </p>
-                </div>
+                @php
+                $queue->first()->queue_position = expandingNumberSize($queue->first()->queue_position);
+                @endphp
+                <queue-component :data="{{ json_encode($queue->first()) }}"></queue-component>
             </div>
             <div class="col-lg-4 text-center">
                 <form method="POST" action="{{ route('queues.update', ['queue' => $queue->first()->id]) }}">
@@ -170,7 +166,7 @@
                                 <tr>
                                     <td>{{ $item->polyclinic->code . expandingNumberSize($item->queue_position)}}</td>
                                     <td>{{ $item->queue_position }}</td>
-                                    <td>{{ $item->polylclinic->name }}</td>
+                                    <td>{{ $item->polyclinic->name }}</td>
                                 </tr>
                                 @endforeach
                             </tbody>

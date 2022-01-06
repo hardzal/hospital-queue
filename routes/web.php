@@ -88,7 +88,7 @@ Route::group(['prefix' => 'inside', 'middleware' => 'auth'], function () {
 });
 Route::get('test_print', [HomeController::class, 'test_print']);
 
-Route::get('/updateQueue', function (MQueue $queue) {
+Route::post('/updateQueue', function (MQueue $queue) {
     event(new \App\Events\QueueUpdated($queue));
     return "Event has been sent!";
 });
