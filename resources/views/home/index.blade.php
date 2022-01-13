@@ -42,10 +42,12 @@
                             <td>{{ $loop->iteration }}</td>
                             <td>{{ $item->polyclinic->code.expandingNumberSize($item->queue_position) }}</td>
                             <td>{{ $item->polyclinic->name }}</td>
-                            <td> @if($item->status == 1)
+                            <td>
+                                @if($item->queue_date >= date('Y-m-d')) @if($item->status == 1)
                                 <span class="badge badge-warning">waiting</span>
                                 @elseif($item->status == 2)
                                 <span class="badge badge-success">success</span>
+                                @endif
                                 @else
                                 <span class="badge badge-danger">skipped</span>
                                 @endif

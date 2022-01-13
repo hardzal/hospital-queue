@@ -112,6 +112,7 @@
 <script src="{{ asset('plugins/datatables-buttons/js/buttons.html5.min.js') }}"></script>
 <script src="{{ asset('plugins/datatables-buttons/js/buttons.print.min.js') }}"></script>
 <script src="{{ asset('plugins/datatables-buttons/js/buttons.colVis.min.js') }}"></script>
+
 @endpush
 
 @push('scripts')
@@ -119,10 +120,13 @@
     $("#data_user").DataTable({
         "dom": 'Brtip',
         "responsive": true, "lengthChange": false, "autoWidth": false,
+        "paging": true,
+        "lengthChange": true,
+        "pageLength": 5,
         // "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"],
         "buttons": [
             {
-                "extend": 'copyHtml5',
+                "exptend": 'copyHtml5',
                 "exportOptions": {
                     "columns": [ 1, ':visible' ]
                 }

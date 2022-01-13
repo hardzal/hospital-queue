@@ -120,6 +120,7 @@
         "dom": 'Brtip',
         "responsive": true, "lengthChange": false, "autoWidth": false,
         // "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"],
+        "pageLength": 3,
         "buttons": [
             {
                 "extend": 'copyHtml5',

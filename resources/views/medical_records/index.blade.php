@@ -74,14 +74,14 @@
                     </tr>
                     @endforeach
                 </tbody>
-                <tfoot>
+                {{-- <tfoot> --}}
                     {{-- <tr>
                         <th>Email</th>
                         <th>Nama Lengkap</th>
                         <th>No HP</th>
                         <th>Jenis Kelamin</th>
                     </tr> --}}
-                </tfoot>
+                    {{-- </tfoot> --}}
             </table>
         </div>
         <!-- /.card-body -->
@@ -121,6 +121,7 @@
         "dom": 'Brtip',
         "responsive": true, "lengthChange": false, "autoWidth": false,
         // "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"],
+        // "paging": true,
         "buttons": [
             {
                 "extend": 'copyHtml5',
@@ -131,25 +132,25 @@
             {
                 "extend": 'excelHtml5',
                 "exportOptions": {
-                    "columns": [ 0, 1, 2, 3, 4 ]
+                    "columns": [ 0, 1, 2, 3 ]
                 }
             },
             {
                 "extend": 'pdfHtml5',
                 "exportOptions": {
-                    "columns": [ 0, 1, 2, 3, 4 ]
+                    "columns": [ 0, 1, 2, 3 ]
                 }
             },
             {
                 "extend": "csv",
                 "exportOptions": {
-                    "columns": [ 0, 1, 2, 3, 4 ]
+                    "columns": [ 0, 1, 2, 3 ]
                 }
             },
             {
                 "extend": "print",
                 "exportOptions": {
-                    "columns": [ 0, 1, 2, 3, 4 ]
+                    "columns": [ 0, 1, 2, 3 ]
                 }
             },
             'colvis'

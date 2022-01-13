@@ -126,25 +126,25 @@
             {
                 "extend": 'excelHtml5',
                 "exportOptions": {
-                    "columns": [ 0, 1, 2, 3, 4 ]
+                    "columns": [ 0, 1, 2 ]
                 }
             },
             {
                 "extend": 'pdfHtml5',
                 "exportOptions": {
-                    "columns": [ 0, 1, 2, 3, 4 ]
+                    "columns": [ 0, 1, 2 ]
                 }
             },
             {
                 "extend": "csv",
                 "exportOptions": {
-                    "columns": [ 0, 1, 2, 3, 4 ]
+                    "columns": [ 0, 1, 2 ]
                 }
             },
             {
                 "extend": "print",
                 "exportOptions": {
-                    "columns": [ 0, 1, 2, 3, 4 ]
+                    "columns": [ 0, 1, 2 ]
                 }
             },
             'colvis'

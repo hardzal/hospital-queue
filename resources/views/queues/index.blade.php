@@ -60,9 +60,17 @@
     </div>
     <div class="col-md-12">
         @php
+        if($queue->first()) {
         $queue->first()->queue_position = expandingNumberSize($queue->first()->queue_position);
+        }
         @endphp
+        @if($queue->first())
         <queue-component :data="{{ json_encode($queue->first()) }}"></queue-component>
+        @else
+        <div class="alert alert-info p-5 text-center vertical-align" style="height:300px;">
+            <h1>Belum ada antrian</h1>
+        </div>
+        @endif
     </div>
     @auth
 </div>
@@ -80,4 +88,5 @@
         'pusherCluster' => config('broadcasting.connections.pusher.options.cluster')
     ]) !!};
 </script>
+<script src="//code.responsivevoice.org/responsivevoice.js?key=fgAqPdhm"></script>
 @endpush
