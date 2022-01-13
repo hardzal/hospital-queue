@@ -21,10 +21,11 @@ class QueueUpdated implements ShouldBroadcast
      * Create a new event instance.
      *
      * @return void
-     */
-    public function __construct(MQueue $queue)
+     */ 
+    public function __construct($queue)
     {
         $this->queue = $queue;
+        info($queue);
     }
 
     /**

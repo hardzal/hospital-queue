@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\QueueUpdated;
 use App\Http\Requests\StoreQueueRequest;
 use App\Models\DoctorSchedule;
 use App\Models\Medicalrecord;
@@ -91,8 +92,11 @@ class QueueController extends Controller
         }
 
         $current_position = 0;
+        $queue_check = MQueue::where('current_position', 1)->where('queue_date', $validated['queue_date'])->get();
 
         if ($queue_position == 1) {
+            $current_position = 1;
+        } else if ($queue_check->count() == 0) {
             $current_position = 1;
         }
 
@@ -224,16 +228,20 @@ class QueueController extends Controller
 
         if ($request->status != 2) {
             // return redirect()->route('queues.list', ['polyclinic_id' => $request->poly_id, 'queue_date' => $request->queue_date])->with('error', 'Antrian terskip, lanjut ke antrian selanjutnya');
-            return response()->json([
-                'message' => 'Antrian terskip, lanjut ke antrian selanjutnya'
-            ]);
+            // return response()->json([
+            //     'message' => 'Antrian terskip, lanjut ke antrian selanjutnya'
+            // ]);
+
+            return redirect()->route('dashboard.index')->with('warning', 'Antrian terskip, berlanjut ke antrian selanjutnya');
         }
 
         // return redirect()->route('queues.list', ['polyclinic_id' => $request->poly_id, 'queue_date' => $request->queue_date])->with('success', 'Lanjut ke antrian selanjutnya');
-
-        return response()->json([
-            'message' => 'Lanjut ke antrian selanjutnya'
-        ]);
+        $queue = MQueue::where('queue_date', date('Y-m-d'))->where('current_position', 1)->get()->first();
+        broadcast(new QueueUpdated($queue));
+        // return response()->json([
+        //     'message' => 'Lanjut ke antrian selanjutnya'
+        // ]);
+        return redirect()->route('dashboard.index')->with('success', 'Antrian berlanjut ke antrian selanjutnya');
     }
 
     public function delete(MQueue $queue)
@@ -355,7 +363,11 @@ class QueueController extends Controller
 
         $current_position = 0;
 
+        $queue_check = MQueue::where('current_position', 1)->where('queue_date', date('Y-m-d'))->get();
+
         if ($queue_position == 1) {
+            $current_position = 1;
+        } else if ($queue_check->count() == 0) {
             $current_position = 1;
         }
 

@@ -87,8 +87,3 @@ Route::group(['prefix' => 'inside', 'middleware' => 'auth'], function () {
     Route::post('/queue/{queue}/call', [QueueController::class, 'call'])->name('queue.call');
 });
 Route::get('test_print', [HomeController::class, 'test_print']);
-
-Route::post('/updateQueue', function (MQueue $queue) {
-    event(new \App\Events\QueueUpdated($queue));
-    return "Event has been sent!";
-});
