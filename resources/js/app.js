@@ -15,6 +15,7 @@ const app = new Vue({
     created() {
         Echo.private('queue.updated')
             .listen('QueueUpdated', (e) => {
+                console.log(e);
                 alert('Antrian telah terupdate!');
                 // console.log(e.post.title)
                 console.log("Antrian selanjutnya!")

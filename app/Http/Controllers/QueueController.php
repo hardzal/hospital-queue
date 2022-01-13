@@ -237,7 +237,7 @@ class QueueController extends Controller
 
         // return redirect()->route('queues.list', ['polyclinic_id' => $request->poly_id, 'queue_date' => $request->queue_date])->with('success', 'Lanjut ke antrian selanjutnya');
         $queue = MQueue::where('queue_date', date('Y-m-d'))->where('current_position', 1)->get()->first();
-        broadcast(new QueueUpdated($queue));
+        broadcast(new QueueUpdated($queue))->toOthers();
         // return response()->json([
         //     'message' => 'Lanjut ke antrian selanjutnya'
         // ]);

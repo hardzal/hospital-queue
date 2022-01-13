@@ -2,7 +2,7 @@
     <div>
         <div class="alert alert-info p-5 text-center">
             <h1>No Antrian : {{ queue.queue_position }}</h1>
-            <h2>{{ queue.polyclinic.code }}{{ queue.queue_position }}</h2>
+            <h2>{{ queue.queue_position }}</h2>
             <h3>{{ data.polyclinic.name }}</h3>
         </div>
     </div>

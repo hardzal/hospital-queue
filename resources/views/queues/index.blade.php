@@ -81,12 +81,12 @@
 @endsection
 
 @push('scripts')
-<script>
+{{-- <script>
     window.Laravel = {!! json_encode([
         'csrfToken' => csrf_token(),
         'pusherKey' => config('broadcasting.connections.pusher.key'),
         'pusherCluster' => config('broadcasting.connections.pusher.options.cluster')
     ]) !!};
-</script>
-<script src="//code.responsivevoice.org/responsivevoice.js?key=fgAqPdhm"></script>
+</script> --}}
+{{-- <script src="//code.responsivevoice.org/responsivevoice.js?key=fgAqPdhm"></script> --}}
 @endpush
