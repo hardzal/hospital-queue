@@ -1,5 +1,9 @@
 @extends('layouts.app-home')
 
+@push('head')
+<script src="{{ mix('js/app.js') }}" defer></script>
+@endpush
+
 @section('header')
 <div class="col-sm-6">
     <h1 class="m-0">Queue List</h1>

@@ -27,6 +27,9 @@
                                 @endforeach
                             </select>
                         </div>
+                        <div class="form-group">
+                            <label for=""></label>
+                        </div>
                         <input type="hidden" name="status" value="{{ $data['status'] }}" />
                         <input type="hidden" name="patient_id" value="{{ $data['patient_id'] }}" />
                         <input type="hidden" name="queue_date" id="todayDate" />
@@ -57,6 +60,8 @@
 @endsection
 
 @push('scripts')
+<script src="{{ mix('js/app.js') }}" defer></script>
+
 <script type="text/javascript">
     function getDate()
     {

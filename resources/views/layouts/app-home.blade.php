@@ -14,8 +14,8 @@
     <!-- Theme style -->
     <link rel="stylesheet" href="{{ asset('dist/css/adminlte.min.css') }}">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-
-    <script src="{{ mix('js/app.js') }}" defer></script>
+    @stack('head')
+    {{-- <script src="{{ mix('js/app.js') }}" defer></script> --}}
 </head>
 
 <body class="hold-transition layout-top-nav">
