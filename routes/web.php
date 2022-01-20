@@ -33,8 +33,6 @@ Route::post('/login', [PatientLoginController::class, 'login'])->name('patient.l
 Route::post('/register', [PatientLoginController::class, 'register'])->name('patient.register');
 Route::post('/logout', [PatientLoginController::class, 'postLogout'])->name('patient.logout');
 
-Route::get('/hello', [PatientLoginController::class, 'hello']);
-
 Route::group(['middleware' => 'auth:patient'], function () {
     Route::get('/queues/register', [QueueController::class, 'register'])->name('queue.register');
     Route::post('/queue', [QueueController::class, 'store'])->name('queue.store');

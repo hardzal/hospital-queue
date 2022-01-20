@@ -12,11 +12,7 @@
             </form>
         </div>
         <div class="col-lg-4 text-center">
-            <form @submit.prevent="callQueue"
-                style="display:inline!important;">
-                <button type="submit" class="btn btn-primary" style="display:inline;">CALL</button>
-                <input type="hidden" name="_token" :value="csrf">
-            </form>
+            <button type="submit" class="btn btn-primary" style="display:inline;" id="call">CALL</button>
             <form @submit.prevent="updateQueue"
                 style="display:inline!important;">
                 <input type="hidden" name="current_position" value=0 v-model="current_position"/>
@@ -65,9 +61,6 @@ export default {
                 console.log(error);
             });
         },
-        callQueue() {
-
-        }
     }
 }
 </script>

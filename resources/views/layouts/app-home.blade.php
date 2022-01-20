@@ -25,9 +25,9 @@
             <nav class="main-header navbar navbar-expand-md navbar-light navbar-white">
                 <div class="container">
                     <a href="{{ route('home') }}" class="navbar-brand">
-                        <img src="{{ asset('dist/img/AdminLTELogo.png') }}" alt="AdminLTE Logo"
+                        <img src="{{ asset('assets/img/logo.png') }}" alt="RS Ananda"
                             class="brand-image img-circle elevation-3" style="opacity: .8">
-                        <span class="brand-text font-weight-light">Antrian RS</span>
+                        <span class="brand-text font-weight-light">Antrian RS Ananda</span>
                     </a>
 
                     <button class="navbar-toggler order-1" type="button" data-toggle="collapse"

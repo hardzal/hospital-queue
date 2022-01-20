@@ -28,7 +28,13 @@
                             </select>
                         </div>
                         <div class="form-group">
-                            <label for=""></label>
+                            <label for="type_medical">Tipe</label>
+                            <select name="type_medical" class="form-control @error('type_medical') is-invalid
+                                @enderror" id="type_medical">
+                                <option>Pilih Tipe Pendaftaran</option>
+                                <option value="1">UMUM</option>
+                                <option value="2">BPJS</option>
+                            </select>
                         </div>
                         <input type="hidden" name="status" value="{{ $data['status'] }}" />
                         <input type="hidden" name="patient_id" value="{{ $data['patient_id'] }}" />

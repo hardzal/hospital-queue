@@ -219,6 +219,7 @@ class QueueController extends Controller
                 'patient_id' => $queue->patient_id,
                 'doctor_schedule_id' => $queue->doctor_schedule_id,
                 'type' => $request->type,
+                'type_medical' => $queue->type_medical,
                 'description' => "",
                 'queue_position' => $queue->queue_position,
             ];
@@ -290,6 +291,7 @@ class QueueController extends Controller
             'status' => 'required',
             'queue_date' => 'required',
             'patient_id' => 'required',
+            'type_medical' => 'required',
         ]);
 
         $data['doctor_schedule_id'] = 0;
@@ -372,6 +374,7 @@ class QueueController extends Controller
         }
 
         $data = [
+            'type_medical' => $request->type_medical,
             'patient_id' => $request->patient_id,
             'polyclinic_id' => $polyclinic_id,
             'doctor_schedule_id' => $doctor_schedule_id,

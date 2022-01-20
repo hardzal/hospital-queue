@@ -40,6 +40,11 @@ class HomeController extends Controller
         return view('home.index', compact('title', 'queues', 'doctorschedules', 'queue_user'));
     }
 
+    public function welcome()
+    {
+        return view('home.welcome');
+    }
+
     public function profile()
     {
         $title = "Profile";

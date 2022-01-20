@@ -39,7 +39,7 @@
 
             <!-- Preloader -->
             <div class="preloader flex-column justify-content-center align-items-center">
-                <img class="animation__shake" src="{{ asset('dist/img/AdminLTELogo.png') }}" alt="AdminLTELogo"
+                <img class="animation__shake" src="{{ asset('assets/img/logo.png') }}" alt="Rumah Sakit Ananda"
                     height="60" width="60">
             </div>
 
@@ -84,6 +84,7 @@
 
     <!-- AdminLTE App -->
     <script src="{{ asset('dist/js/adminlte.js') }}"></script>
+    
 </body>
 
 </html>

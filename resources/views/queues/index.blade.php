@@ -48,8 +48,8 @@
         </form>
     </div>
 </div>
-<div class="row">
-    <div class="col-md-12">
+<div class="row mb-3">
+    <div class="col-md-12 d-table">
         @if(session()->has('success'))
         <div class="alert alert-success alert-dismissible fade show" role="alert">
             {{ session("success") }}
@@ -62,7 +62,7 @@
         </div>
         @endif
     </div>
-    <div class="col-md-12">
+    <div class="col-md-6 d-table">
         @php
         if($queue->first()) {
         $queue->first()->queue_position = expandingNumberSize($queue->first()->queue_position);
@@ -71,17 +71,23 @@
         @if($queue->first())
         <queue-component :data="{{ json_encode($queue->first()) }}"></queue-component>
         @else
-        <div class="alert alert-info p-5 text-center vertical-align" style="height:300px;">
+        <div class="alert alert-primary p-5 text-center" style="height:400px;">
             <h1>Belum ada antrian</h1>
         </div>
         @endif
     </div>
+    <div class="col-md-6">
+        <iframe width="100%" height="405" src="https://www.youtube-nocookie.com/embed/9Ff8YzqqEFE"
+            title="YouTube video player" frameborder="0"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            allowfullscreen></iframe>
+    </div>
     @auth
+    <queue-update-component :queueId="{{ $queue->first()->id }}"
+        :link="{{ json_encode(route('queues.update', ['queue' => $queue->first()->id]))  }}">
+    </queue-update-component>
+    @endauth
 </div>
-<queue-update-component :queueId="{{ $queue->first()->id }}"
-    :link="{{ json_encode(route('queues.update', ['queue' => $queue->first()->id]))  }}">
-</queue-update-component>
-@endauth
 @endsection
 
 @push('scripts')

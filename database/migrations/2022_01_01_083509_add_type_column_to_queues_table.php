@@ -15,6 +15,7 @@ class AddTypeColumnToQueuesTable extends Migration
     {
         Schema::table('queues', function (Blueprint $table) {
             $table->string('type')->nullable();
+            $table->integer('type_medical')->nullable();
         });
     }
 

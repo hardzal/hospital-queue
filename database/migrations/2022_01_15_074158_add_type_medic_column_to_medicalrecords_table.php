@@ -14,7 +14,7 @@ class AddTypeMedicColumnToMedicalRecordsTable extends Migration
     public function up()
     {
         Schema::table('medicalrecords', function (Blueprint $table) {
-            $table->string('type_medical')->nullable();
+            $table->integer('type_medical')->nullable();
         });
     }
 
