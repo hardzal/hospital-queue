@@ -16,13 +16,14 @@
   - [x] Rekam Medik
   - [x] Jadwal
   - [x] Jadwal Dokter
-  - [ ] Antrian
-- [ ] Pendaftaran
+  - [x] Antrian
+- [ ] Antrian Pendaftaran
 - [x] Login
-- [ ] Antrian Realtime
+- [x] Antrian Realtime
 - [ ] WA Send
 - [x] Dashboard
 - [ ] Profil Page
+- [ ] History Page
 
 https://www.kaggle.com/achintyatripathi/content-based-news-recomender-system
 https://www.kaggle.com/marlesson/building-a-recommendation-system-using-cnn-v2

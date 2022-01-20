@@ -107,7 +107,7 @@
             </div>
 
             <div class="col-lg-4 text-center" id="center-button">
-                <button class="btn btn-primary" style="display:inlien;" id="call">CALL</button>
+                <button class="btn btn-primary" style="display:inlien;" id="call" type="button">CALL</button>
                 <form method="POST" action="{{ route('queues.update', ['queue' => $queue->first()->id ]) }}"
                     style=" display:inline!important;">
                     @csrf
@@ -229,12 +229,15 @@
 <script src="{{ mix('js/app.js') }}" defer></script>
 
 <!-- AdminLTE dashboard demo (This is only for demo purposes) -->
-<script src="{{ asset('dist/js/pages/dashboard.js') }}"></script>
+{{-- <script src="{{ asset('dist/js/pages/dashboard.js') }}"></script> --}}
 <script src="//code.responsivevoice.org/responsivevoice.js?key=fgAqPdhm"></script>
+@php
+$posisi = implode(" ", str_split($queue->first()->queue_position));
+@endphp
 
 <script type="text/javascript">
-    $('#center-button').on('click', 'button#call', function () {
-        alert("helllo?");
+    $(document).ready(function() {
+        $('#center-button').on('click', 'button#call', function () {
         var bell  = document.getElementById('tingtung');
         // MAINKAN SUARA BEL PADA SAAT AWAL
         bell.pause();
@@ -246,8 +249,10 @@
 
         // MAINKAN SUARA NOMOR URUT
         setTimeout(function() {
-            return responsiveVoice.speak(" Nomor Antrian," +data[ 1 ]+ ", ke "+loket,"Indonesian Female", {rate: 0.8, pitch: 1, volume: 1});
+            return responsiveVoice.speak(" Nomor Antrian, " + "{{ $posisi }} Ke loket antrian"  ,"Indonesian Female", {rate: 0.8, pitch: 1, volume: 1});
         }, totalwaktu);
     } );
+
+    });
 </script>
 @endpush
